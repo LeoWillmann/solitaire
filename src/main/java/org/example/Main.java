@@ -1,7 +1,10 @@
 package org.example;
 
+import org.example.model.deck.CardDeck;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+
+        CardDeck deck = new CardDeck(1);
     }
 }
