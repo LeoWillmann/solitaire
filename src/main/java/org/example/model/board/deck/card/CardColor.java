@@ -1,4 +1,4 @@
-package org.example.model.deck.card;
+package org.example.model.board.deck.card;
 
 public enum CardColor {
     BLACK,

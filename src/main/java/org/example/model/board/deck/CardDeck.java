@@ -1,7 +1,7 @@
-package org.example.model.deck;
+package org.example.model.board.deck;
 
-import org.example.model.deck.card.Card;
-import org.example.model.deck.card.CardSuit;
+import org.example.model.board.deck.card.Card;
+import org.example.model.board.deck.card.CardSuit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class CardDeck {
         for (int i = 0; i < numberOfDecks; i++) {
             for (CardSuit suit : CardSuit.values()) {
                 for (int j = 0; j < 13; j++) {
-                    cards.add(new Card(j + 1, suit));
+                    cards.add(new Card(j + 1, suit, false));
                 }
             }
         }
@@ -36,9 +36,18 @@ public class CardDeck {
         }
     }
 
+    public Card takeCard() {
+        if (cards.size() == 0) {
+            return null;
+        }
+        Card card = cards.get(0);
+        cards.remove(0);
+        return card;
+    }
+
     public void printDeck() {
         for (Card card : cards) {
-            card.printCard();
+            System.out.println(card.cardDescription());
         }
     }
 }
