@@ -1,18 +1,22 @@
 package org.example.model.board;
 
-import org.example.model.board.boardLayout.BoardLayout;
-import org.example.model.board.rules.BoardRules;
+import org.example.model.board.deck.CardDeck;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Board class will be the game board for the solitaire game.
  */
 public class Board {
+    private final List<CardPosition> cardPositions = new ArrayList<>();
+    private final CardDeck deck;
 
-    private BoardLayout layout;
-    private BoardRules rules;
+    public Board(CardDeck deck) {
+        this.deck = deck;
+    }
 
-    public Board(BoardLayout layout, BoardRules rules) {
-        this.layout = layout;
-        this.rules = rules;
+    public void addCardPosition(CardPosition cardPosition) {
+        cardPositions.add(cardPosition);
     }
 }

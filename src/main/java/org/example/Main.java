@@ -1,17 +1,26 @@
 package org.example;
 
-import org.example.model.board.deck.card.Card;
-import org.example.model.board.deck.card.CardSuit;
-import org.example.model.board.rules.gameRules.RedBlackSuitRule;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import org.example.view.StartView;
 
+import javax.swing.*;
+
+/**
+ * Main class.
+ */
 public class Main {
+    /**
+     * Main function.
+     *
+     * @param args args.
+     */
     public static void main(String[] args) {
+        FlatDarculaLaf.setup(); // Dark mode
 
-//        CardDeck deck = new CardDeck(1);
-//        Board board = new Board(new SolitaireLayout(), null);
+        StartView startView = new StartView();
 
-        RedBlackSuitRule rule = new RedBlackSuitRule();
-        System.out.println(rule.validateMove(new Card(5, CardSuit.HEARTS, true), new Card(2, CardSuit.SPADES, true)));
-
+        SwingUtilities.invokeLater(() -> {
+            startView.startUI(); // start gui
+        });
     }
 }
