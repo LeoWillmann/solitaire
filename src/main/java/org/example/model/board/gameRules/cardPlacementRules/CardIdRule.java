@@ -1,6 +1,8 @@
-package org.example.model.board.gameRules;
+package org.example.model.board.gameRules.cardPlacementRules;
 
+import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
+import org.example.model.board.gameRules.GameRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +27,9 @@ public class CardIdRule extends GameRule {
     }
 
     @Override
-    public boolean validateMove(Card bottom, Card top) {
+    public boolean validateMove(CardPosition cardPosition, Card card) {
         for (Integer id : allowedCardIds) {
-            if (id == top.cardValue()) {
+            if (id == card.cardValue()) {
                 return true;
             }
         }

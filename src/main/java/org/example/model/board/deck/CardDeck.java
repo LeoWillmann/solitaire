@@ -18,7 +18,7 @@ public class CardDeck {
         for (int i = 0; i < numberOfDecks; i++) {
             for (CardSuit suit : CardSuit.values()) {
                 for (int j = 0; j < 13; j++) {
-                    cards.add(new Card(j + 1, suit, false));
+                    cards.add(new Card(j + 1, suit));
                 }
             }
         }
@@ -43,11 +43,5 @@ public class CardDeck {
         Card card = cards.get(0);
         cards.remove(0);
         return card;
-    }
-
-    public void printDeck() {
-        for (Card card : cards) {
-            System.out.println(card.cardDescription());
-        }
     }
 }

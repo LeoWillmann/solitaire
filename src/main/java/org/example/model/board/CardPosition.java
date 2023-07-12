@@ -8,16 +8,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CardPosition {
-    private final RuleContainer movementRule = new RuleContainer();
+    private final Board board;
+    private final RuleContainer placementRule = new RuleContainer();
     private final RuleContainer emptyPositionRule = new RuleContainer();
+    private final RuleContainer takeRule = new RuleContainer();
     private final List<Card> cards = new ArrayList<>();
+
+    public CardPosition(Board board) {
+        this.board = board;
+    }
+
+    public void addTakeRule(GameRule rule) {
+        takeRule.addRule(rule);
+    }
 
     public void addEmptyPositionRule(GameRule rule) {
         emptyPositionRule.addRule(rule);
     }
 
-    public void addMovementRule(GameRule rule) {
-        movementRule.addRule(rule);
+    public void addPlacementRule(GameRule rule) {
+        placementRule.addRule(rule);
     }
 
     public boolean isCardStackEmpty() {
@@ -32,22 +42,47 @@ public class CardPosition {
         }
     }
 
-    public void move(Card card) {
-        cards.add(card);
-    }
-
-    public void checkMove(Card card) {
-        if (isValidMove(card)) {
-            move(card);
+    public Card getCard(int i) {
+        if (i >= 0 && i < numberOfCards()) {
+            return cards.get(i);
+        } else {
+            return null;
         }
     }
 
-    public boolean isValidMove(Card newCard) {
-        Card topCard = getTopCard();
-        if (topCard == null) {
-            return emptyPositionRule.checkRules(null, newCard);
+    public int numberOfCards() {
+        return cards.size();
+    }
+
+    public int getIndexOfCard(Card card) {
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i) == card) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean isValidTake(Card card) {
+        return takeRule.checkRules(this, card);
+    }
+
+
+    public void placeCard(Card card) {
+        cards.add(card);
+    }
+
+    public void checkPlacement(Card card) {
+        if (isValidPlacement(card)) {
+            placeCard(card);
+        }
+    }
+
+    public boolean isValidPlacement(Card newCard) {
+        if (isCardStackEmpty()) {
+            return emptyPositionRule.checkRules(this, newCard);
         } else {
-            return movementRule.checkRules(topCard, newCard);
+            return placementRule.checkRules(this, newCard);
         }
     }
 

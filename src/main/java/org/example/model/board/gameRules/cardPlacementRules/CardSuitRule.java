@@ -1,7 +1,9 @@
-package org.example.model.board.gameRules;
+package org.example.model.board.gameRules.cardPlacementRules;
 
+import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
+import org.example.model.board.gameRules.GameRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +29,9 @@ public class CardSuitRule extends GameRule {
     }
 
     @Override
-    public boolean validateMove(Card bottom, Card top) {
+    public boolean validateMove(CardPosition cardPosition, Card card) {
         for (CardSuit suit : allowedSuits) {
-            if (suit == top.suit()) {
+            if (suit == card.suit()) {
                 return true;
             }
         }

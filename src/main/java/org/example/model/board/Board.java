@@ -1,6 +1,8 @@
 package org.example.model.board;
 
 import org.example.model.board.deck.CardDeck;
+import org.example.model.board.gameRules.GameRule;
+import org.example.model.board.gameRules.RuleContainer;
 
 import java.util.ArrayList;
 import java.util.List;

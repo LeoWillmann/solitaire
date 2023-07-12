@@ -4,9 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class StartView {
-    public StartView() {
-        startUI();
-    }
 
     public void startUI() {
         JFrame frame = new JFrame("Game Frame"); // makes frame with name "Game frame"
@@ -16,12 +13,13 @@ public class StartView {
         frame.setResizable(true); // set resizable to true
         frame.setPreferredSize(new Dimension(1400, 800)); // dimensions of frame
         frame.pack();
+
         frame.requestFocusInWindow();
         frame.setLocationRelativeTo(null); // set no relative location
         frame.setVisible(true); // sets frame to visible
 
-        frame.add(new PaintCardView());
-
-
+        frame.add(new BoardView());
     }
+
+
 }

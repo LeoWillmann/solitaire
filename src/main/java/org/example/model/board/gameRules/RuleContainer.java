@@ -1,5 +1,6 @@
 package org.example.model.board.gameRules;
 
+import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ public class RuleContainer {
         ruleList.add(rule);
     }
 
-    public boolean checkRules(Card bottom, Card top) {
+    public boolean checkRules(CardPosition cardPosition, Card card) {
         for (GameRule rule : ruleList) {
-            if (!rule.validateMove(bottom, top)) {
+            if (!rule.validateMove(cardPosition, card)) {
                 return false;
             }
         }
