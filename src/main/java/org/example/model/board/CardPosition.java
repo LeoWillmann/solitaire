@@ -9,21 +9,24 @@ import java.util.List;
 
 public class CardPosition {
     private final Board board;
-    private final RuleContainer placementRule = new RuleContainer();
-    private final RuleContainer emptyPositionRule = new RuleContainer();
-    private final RuleContainer takeRule = new RuleContainer();
+    private final RuleContainer placementRule;
+    private final RuleContainer takeRule;
     private final List<Card> cards = new ArrayList<>();
 
     public CardPosition(Board board) {
         this.board = board;
+        placementRule = new RuleContainer();
+        takeRule = new RuleContainer();
+    }
+
+    public CardPosition(Board board, RuleContainer placementRule, RuleContainer takeRule) {
+        this.board = board;
+        this.placementRule = placementRule;
+        this.takeRule = takeRule;
     }
 
     public void addTakeRule(GameRule rule) {
         takeRule.addRule(rule);
-    }
-
-    public void addEmptyPositionRule(GameRule rule) {
-        emptyPositionRule.addRule(rule);
     }
 
     public void addPlacementRule(GameRule rule) {
@@ -79,11 +82,7 @@ public class CardPosition {
     }
 
     public boolean isValidPlacement(Card newCard) {
-        if (isCardStackEmpty()) {
-            return emptyPositionRule.checkRules(this, newCard);
-        } else {
-            return placementRule.checkRules(this, newCard);
-        }
+        return placementRule.checkRules(this, newCard);
     }
 
 }

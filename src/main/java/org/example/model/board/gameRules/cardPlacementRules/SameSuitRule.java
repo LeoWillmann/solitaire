@@ -8,6 +8,9 @@ public class SameSuitRule extends GameRule {
 
     @Override
     public boolean validateMove(CardPosition cardPosition, Card card) {
+        if (cardPosition.numberOfCards() == 0) {
+            return true;
+        }
         return cardPosition.getTopCard().suit() == card.suit();
     }
 }
