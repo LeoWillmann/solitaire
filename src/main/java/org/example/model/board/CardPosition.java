@@ -53,6 +53,10 @@ public class CardPosition {
         }
     }
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
     public int numberOfCards() {
         return cards.size();
     }

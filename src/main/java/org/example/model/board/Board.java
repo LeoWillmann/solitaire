@@ -21,4 +21,12 @@ public class Board {
     public void addCardPosition(CardPosition cardPosition) {
         cardPositions.add(cardPosition);
     }
+
+    public List<CardPosition> getCardPositions() {
+        return cardPositions;
+    }
+
+    public CardDeck getDeck() {
+        return deck;
+    }
 }

@@ -9,8 +9,21 @@ import org.example.model.board.gameRules.cardPlacementRules.*;
 import org.example.model.board.gameRules.cardTakeRules.MultiTakeRule;
 
 public class InnitGameBoards {
-    public static void makeSolitaire() {
-        Board board = new Board(new CardDeck(1));
+    public static Board makeSolitaire() {
+        CardDeck cardDeck = new CardDeck(1);
+        cardDeck.shuffleDeck();
+        Board board = new Board(cardDeck);
+        innitPositions(board);
+        return board;
+    }
+
+    private static void dealCards(Board board, CardPosition cardPosition, int cards) {
+        for (int i = 0; i < cards; i++) {
+            cardPosition.placeCard(board.getDeck().takeCard());
+        }
+    }
+
+    private static void innitPositions(Board board) {
         RuleContainer placementRule = new RuleContainer();
         RuleContainer takeRule = new RuleContainer();
         placementRule.addRule(new DifferentSuitColorRule());
@@ -20,6 +33,7 @@ public class InnitGameBoards {
         for (int i = 0; i < 7; i++) {
             CardPosition cardPosition = new CardPosition(board, placementRule, takeRule);
             board.addCardPosition(cardPosition);
+            dealCards(board, cardPosition, i + 1);
         }
 
         for (CardSuit suit : CardSuit.values()) {
@@ -27,6 +41,7 @@ public class InnitGameBoards {
             cardPosition.addPlacementRule(new CardIdRule(1));
             cardPosition.addPlacementRule(new CardSuitRule(suit));
             cardPosition.addPlacementRule(new AscendingCardsRule());
+            board.addCardPosition(cardPosition);
         }
     }
 }

@@ -18,13 +18,13 @@ public class CardDeck {
         for (int i = 0; i < numberOfDecks; i++) {
             for (CardSuit suit : CardSuit.values()) {
                 for (int j = 0; j < 13; j++) {
-                    cards.add(new Card(j + 1, suit));
+                    cards.add(new Card(j + 1, suit, true));
                 }
             }
         }
     }
 
-    private void shuffleDeck() {
+    public void shuffleDeck() {
         List<Card> deck = new ArrayList<>(cards);
         cards.clear();
 
