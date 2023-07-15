@@ -43,7 +43,8 @@ public class BoardView extends JPanel implements Listenable {
         super.paintComponent(g);
         int i = 0;
         for (CardPositionView cardPositionView : cardPositionViews) {
-            cardPositionView.draw(g, POSX + i * (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY);
+            cardPositionView.setPosition(POSX + i * (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY);
+            cardPositionView.draw(g);
             i++;
         }
     }

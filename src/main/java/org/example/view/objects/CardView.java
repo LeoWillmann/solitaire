@@ -44,9 +44,14 @@ public class CardView implements Drawable {
         return valueName + " of " + String.valueOf(card.suit()).toLowerCase();
     }
 
+    public void setPosition(int x, int y) {
+        point.setLocation(x,y);
+    }
+
     @Override
-    public void draw(Graphics g, int x, int y) {
-        point.setLocation(x, y);
+    public void draw(Graphics g) {
+        int x = (int) point.getX();
+        int y = (int) point.getY();
         g.setColor(color);
         g.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
         g.setColor(Color.WHITE);

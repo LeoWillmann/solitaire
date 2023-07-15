@@ -15,7 +15,6 @@ public class CardPositionView implements Drawable {
 
     private final boolean showAllCards;
 
-
     public CardPositionView(CardPosition cardPosition, boolean showAllCards) {
         this.cardPosition = cardPosition;
         this.showAllCards = showAllCards;
@@ -37,13 +36,21 @@ public class CardPositionView implements Drawable {
         }
     }
 
-    @Override
-    public void draw(Graphics g, int x, int y) {
-        point.setLocation(x, y);
+    public void setPosition(int x, int y) {
+        point.setLocation(x,y);
+    }
 
-        for (CardView cardView : cardViews) {
-            cardView.draw(g, x, y);
-            y += CARD_VERTICAL_DISTANCE;
+    @Override
+    public void draw(Graphics g) {
+        int x = (int) point.getX();
+        int y = (int) point.getY();
+        if (showAllCards) {
+            for (CardView cardView : cardViews) {
+                cardView.draw(g);
+                y += CARD_VERTICAL_DISTANCE;
+            }
+        } else {
+            cardViews.get(cardViews.size() - 1).draw(g);
         }
     }
 }
