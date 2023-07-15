@@ -11,7 +11,7 @@ import org.example.model.board.gameRules.cardTakeRules.MultiTakeRule;
 public class InnitGameBoards {
     public static Board makeSolitaire() {
         CardDeck cardDeck = new CardDeck(1);
-        cardDeck.shuffleDeck();
+//        cardDeck.shuffleDeck();
         Board board = new Board(cardDeck);
         innitPositions(board);
         return board;
@@ -31,13 +31,13 @@ public class InnitGameBoards {
         placementRule.addRule(new CardIdRule(13));
         takeRule.addRule(new MultiTakeRule());
         for (int i = 0; i < 7; i++) {
-            CardPosition cardPosition = new CardPosition(board, placementRule, takeRule);
+            CardPosition cardPosition = new CardPosition(placementRule, takeRule);
             board.addCardPosition(cardPosition);
             dealCards(board, cardPosition, i + 1);
         }
 
         for (CardSuit suit : CardSuit.values()) {
-            CardPosition cardPosition = new CardPosition(board);
+            CardPosition cardPosition = new CardPosition();
             cardPosition.addPlacementRule(new CardIdRule(1));
             cardPosition.addPlacementRule(new CardSuitRule(suit));
             cardPosition.addPlacementRule(new AscendingCardsRule());

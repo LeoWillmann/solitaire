@@ -10,15 +10,20 @@ public class CardView implements Drawable {
     public static final int CARD_HEIGHT = 150;
     private static final Color DEFAULT_COLOR = Color.BLUE;
     private static final Color SELECT_COLOR = Color.RED;
-    //    private static final Image cardImage;
     private final Point point = new Point();
     private final Card card;
+    private CardPositionView parent;
     private Color color;
 
-    public CardView(Card card) {
+    public CardView(Card card, CardPositionView parent) {
         this.card = card;
+        this.parent = parent;
         point.setLocation(0, 0);
         color = DEFAULT_COLOR;
+    }
+
+    public CardPositionView getParent() {
+        return parent;
     }
 
     public void selectColor() {

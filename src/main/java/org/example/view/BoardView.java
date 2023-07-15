@@ -18,6 +18,7 @@ public class BoardView extends JPanel implements Listenable {
     private static final int POSY = 0;
     private static final int HORIZONTAL_COLUMN_DISTANCE = 30;
     private final List<CardPositionView> cardPositionViews = new ArrayList<>();
+    private final List<CardView> cardViews = new ArrayList<>();
     private final Board board;
 
     public BoardView() {
@@ -26,11 +27,32 @@ public class BoardView extends JPanel implements Listenable {
 
         MouseMovementListener mouseMovementListener = new MouseMovementListener(this);
         addMouseListener(mouseMovementListener);
+        addMouseMotionListener(mouseMovementListener);
+
     }
 
     private void innitBoardView() {
+        int i = 0;
         for (CardPosition cardPosition : board.getCardPositions()) {
-            cardPositionViews.add(new CardPositionView(cardPosition, true));
+            CardPositionView cardPositionView = new CardPositionView(cardPosition, true, this);
+            cardPositionView.setPosition(POSX + i * (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY);
+            cardPositionViews.add(cardPositionView);
+            i++;
+        }
+    }
+
+    public void addCardView(CardView cardView) {
+        cardViews.add(cardView);
+    }
+
+    public List<CardView> getCardViews() {
+        return cardViews;
+    }
+
+    public void setCardViewsToTop(List<CardView> cardViewList) {
+        for (CardView cardView : cardViewList) {
+            cardViews.remove(cardView);
+            cardViews.add(cardView);
         }
     }
 
@@ -41,11 +63,19 @@ public class BoardView extends JPanel implements Listenable {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int i = 0;
+        drawPositions(g);
+        drawCards(g);
+    }
+
+    private void drawPositions(Graphics g) {
         for (CardPositionView cardPositionView : cardPositionViews) {
-            cardPositionView.setPosition(POSX + i * (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY);
             cardPositionView.draw(g);
-            i++;
+        }
+    }
+
+    private void drawCards(Graphics g) {
+        for (CardView cardView : cardViews) {
+            cardView.draw(g);
         }
     }
 

@@ -8,19 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CardPosition {
-    private final Board board;
     private final RuleContainer placementRule;
     private final RuleContainer takeRule;
     private final List<Card> cards = new ArrayList<>();
 
-    public CardPosition(Board board) {
-        this.board = board;
+    public CardPosition() {
         placementRule = new RuleContainer();
         takeRule = new RuleContainer();
     }
 
-    public CardPosition(Board board, RuleContainer placementRule, RuleContainer takeRule) {
-        this.board = board;
+    public CardPosition(RuleContainer placementRule, RuleContainer takeRule) {
         this.placementRule = placementRule;
         this.takeRule = takeRule;
     }
