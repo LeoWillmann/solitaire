@@ -5,7 +5,7 @@ import org.example.model.board.deck.card.Card;
 
 public class TrueRule extends GameRule {
     @Override
-    public boolean validateMove(CardPosition cardPosition, Card card) {
+    public boolean validateMove(CardPosition cardPosition, Card topCard, Card card) {
         return true;
     }
 }

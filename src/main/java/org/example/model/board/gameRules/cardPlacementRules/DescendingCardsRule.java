@@ -7,10 +7,10 @@ import org.example.model.board.gameRules.GameRule;
 public class DescendingCardsRule extends GameRule {
 
     @Override
-    public boolean validateMove(CardPosition cardPosition, Card card) {
-        if (cardPosition.numberOfCards() == 0) {
+    public boolean validateMove(CardPosition cardPosition, Card topCard, Card card) {
+        if (topCard == null) {
             return true;
         }
-        return cardPosition.getTopCard().cardValue() - 1 == card.cardValue();
+        return topCard.cardValue() - 1 == card.cardValue();
     }
 }

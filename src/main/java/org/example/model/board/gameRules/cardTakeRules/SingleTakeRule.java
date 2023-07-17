@@ -7,7 +7,7 @@ import org.example.model.board.gameRules.GameRule;
 public class SingleTakeRule extends GameRule {
 
     @Override
-    public boolean validateMove(CardPosition cardPosition, Card card) {
+    public boolean validateMove(CardPosition cardPosition, Card topCard, Card card) {
         return cardPosition.getTopCard() == card;
     }
 }

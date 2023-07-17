@@ -49,11 +49,26 @@ public class BoardView extends JPanel implements Listenable {
         return cardViews;
     }
 
+    public void removeCardViews(List<CardView> cardViewList) {
+        cardViews.removeAll(cardViewList);
+    }
+
     public void setCardViewsToTop(List<CardView> cardViewList) {
         for (CardView cardView : cardViewList) {
-            cardViews.remove(cardView);
-            cardViews.add(cardView);
+            if (cardViews.contains(cardView)) {
+                cardViews.remove(cardView);
+                cardViews.add(cardView);
+            }
         }
+    }
+
+    public CardPositionView getCardPositionView(CardPosition cardPosition) {
+        for (CardPositionView cardPositionView : cardPositionViews) {
+            if (cardPositionView.getCardPosition() == cardPosition) {
+                return cardPositionView;
+            }
+        }
+        return null;
     }
 
     public List<CardPositionView> getCardPositionViews() {

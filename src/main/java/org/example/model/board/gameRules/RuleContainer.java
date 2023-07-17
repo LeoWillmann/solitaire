@@ -13,12 +13,14 @@ public class RuleContainer {
         ruleList.add(rule);
     }
 
-    public boolean checkRules(CardPosition cardPosition, Card card) {
+    public boolean checkRules(CardPosition cardPosition, Card topCard, Card newcard) {
         for (GameRule rule : ruleList) {
-            if (!rule.validateMove(cardPosition, card)) {
+            if (!rule.validateMove(cardPosition, topCard, newcard)) {
                 return false;
             }
         }
         return true;
     }
+
+
 }

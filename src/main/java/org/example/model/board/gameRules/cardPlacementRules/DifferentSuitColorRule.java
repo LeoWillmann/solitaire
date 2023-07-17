@@ -7,10 +7,10 @@ import org.example.model.board.gameRules.GameRule;
 public class DifferentSuitColorRule extends GameRule {
 
     @Override
-    public boolean validateMove(CardPosition cardPosition, Card card) {
-        if (cardPosition.numberOfCards() == 0) {
+    public boolean validateMove(CardPosition cardPosition, Card topCard, Card card) {
+        if (topCard == null) {
             return true;
         }
-        return cardPosition.getTopCard().suit().getColor() != card.suit().getColor();
+        return topCard.suit().getColor() != card.suit().getColor();
     }
 }

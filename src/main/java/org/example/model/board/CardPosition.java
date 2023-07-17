@@ -3,6 +3,7 @@ package org.example.model.board;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.gameRules.GameRule;
 import org.example.model.board.gameRules.RuleContainer;
+import org.example.view.objects.CardMovementListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class CardPosition {
     private final RuleContainer placementRule;
     private final RuleContainer takeRule;
     private final List<Card> cards = new ArrayList<>();
+    private CardMovementListener cardMovementListener;
 
     public CardPosition() {
         placementRule = new RuleContainer();
@@ -24,6 +26,10 @@ public class CardPosition {
 
     public void addTakeRule(GameRule rule) {
         takeRule.addRule(rule);
+    }
+
+    public void setCardMovementListener(CardMovementListener cardMovementListener) {
+        this.cardMovementListener = cardMovementListener;
     }
 
     public void addPlacementRule(GameRule rule) {
@@ -42,20 +48,16 @@ public class CardPosition {
         }
     }
 
-    public Card getCard(int i) {
-        if (i >= 0 && i < numberOfCards()) {
-            return cards.get(i);
-        } else {
-            return null;
-        }
-    }
-
     public List<Card> getCards() {
         return cards;
     }
 
     public int numberOfCards() {
         return cards.size();
+    }
+
+    public boolean isEmpty() {
+        return cards.size() == 0;
     }
 
     public int getIndexOfCard(Card card) {
@@ -67,23 +69,49 @@ public class CardPosition {
         return -1;
     }
 
-    public boolean isValidTake(Card card) {
-        return takeRule.checkRules(this, card);
+    private void takeCards(List<Card> cardList) {
+        cards.removeAll(cardList);
+//        cardMovementListener.takeCards(this, cardList.size());
+        notifyCardMovementListener();
     }
 
-
-    public void placeCard(Card card) {
-        cards.add(card);
+    public boolean isValidTake(List<Card> cardsToTake) {
+        for (Card card : cardsToTake) {
+            if (!takeRule.checkRules(this, null, card)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public void checkPlacement(Card card) {
-        if (isValidPlacement(card)) {
-            placeCard(card);
+    public void placeCards(List<Card> cardList) {
+        cards.addAll(cardList);
+        notifyCardMovementListener();
+//        notifyCardMovementListener(this, cardList);
+    }
+
+    public boolean requestPlacements(CardPosition takePosition, List<Card> cardList) {
+        if (takePosition.isValidTake(cardList) && this.isValidPlacement(getTopCard(), cardList)) {
+            takePosition.takeCards(cardList);
+            this.placeCards(cardList);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isValidPlacement(Card nextCard, List<Card> newCards) {
+        for (Card card : newCards) {
+            if (!placementRule.checkRules(this, nextCard, card)) {
+                return false;
+            }
+            nextCard = card;
+        }
+        return true;
+    }
+
+    private void notifyCardMovementListener() {
+        if (cardMovementListener != null) {
+            cardMovementListener.updateView();
         }
     }
-
-    public boolean isValidPlacement(Card newCard) {
-        return placementRule.checkRules(this, newCard);
-    }
-
 }

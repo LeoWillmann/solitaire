@@ -29,12 +29,7 @@ public class CardSuitRule extends GameRule {
     }
 
     @Override
-    public boolean validateMove(CardPosition cardPosition, Card card) {
-        for (CardSuit suit : allowedSuits) {
-            if (suit == card.suit()) {
-                return true;
-            }
-        }
-        return false;
+    public boolean validateMove(CardPosition cardPosition, Card topCard, Card card) {
+        return allowedSuits.contains(card.suit());
     }
 }

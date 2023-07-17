@@ -1,6 +1,8 @@
 package org.example.view.objects;
 
+import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
+import org.example.model.board.deck.card.CardColor;
 
 import java.awt.*;
 
@@ -10,16 +12,20 @@ public class CardView implements Drawable {
     public static final int CARD_HEIGHT = 150;
     private static final Color DEFAULT_COLOR = Color.BLUE;
     private static final Color SELECT_COLOR = Color.RED;
-    private final Point point = new Point();
     private final Card card;
+    private final Point point = new Point();
     private CardPositionView parent;
     private Color color;
 
     public CardView(Card card, CardPositionView parent) {
         this.card = card;
         this.parent = parent;
-        point.setLocation(0, 0);
-        color = DEFAULT_COLOR;
+//        parent.setCardViewPos(this);
+        if (card.suit().getColor() == CardColor.RED) {
+            color = Color.RED;
+        } else {
+            color = Color.blue;
+        }
     }
 
     public CardPositionView getParent() {
@@ -49,8 +55,19 @@ public class CardView implements Drawable {
         return valueName + " of " + String.valueOf(card.suit()).toLowerCase();
     }
 
+    public void moveCard(CardPositionView cardPositionView) {
+        parent.getCardViews().remove(this);
+        parent = cardPositionView;
+        parent.getCardViews().add(this);
+        parent.setCardViewPos(this);
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
     public void setPosition(int x, int y) {
-        point.setLocation(x,y);
+        point.setLocation(x, y);
     }
 
     @Override

@@ -7,14 +7,14 @@ import org.example.model.board.gameRules.GameRule;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardIdRule extends GameRule {
+public class FirstCardIdRule extends GameRule {
     private final List<Integer> allowedCardIds = new ArrayList<>();
 
-    public CardIdRule(int id) {
+    public FirstCardIdRule(int id) {
         allowedCardIds.add(id);
     }
 
-    public CardIdRule(List<Integer> ids) {
+    public FirstCardIdRule(List<Integer> ids) {
         allowedCardIds.addAll(ids);
     }
 
@@ -27,12 +27,10 @@ public class CardIdRule extends GameRule {
     }
 
     @Override
-    public boolean validateMove(CardPosition cardPosition, Card card) {
-        for (Integer id : allowedCardIds) {
-            if (id == card.cardValue()) {
-                return true;
-            }
+    public boolean validateMove(CardPosition cardPosition, Card topCard, Card card) {
+        if (cardPosition.isEmpty() && topCard == null) {
+            return allowedCardIds.contains(card.cardValue());
         }
-        return false;
+        return true;
     }
 }

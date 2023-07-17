@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardPositionView implements Drawable {
+public class CardPositionView implements Drawable, CardMovementListener {
     public static final int CARD_VERTICAL_DISTANCE = 30;
     private final CardPosition cardPosition;
     private final List<CardView> cardViews = new ArrayList<>();
@@ -20,8 +20,9 @@ public class CardPositionView implements Drawable {
         this.cardPosition = cardPosition;
         this.showAllCards = showAllCards;
         this.boardView = boardView;
-        point.setLocation(0, 0);
-        innitCardViews();
+
+        cardPosition.setCardMovementListener(this);
+        innitCardPosition();
     }
 
     public List<CardView> getCardViews() {
@@ -32,14 +33,15 @@ public class CardPositionView implements Drawable {
         return point;
     }
 
-    private void innitCardViews() {
+    private void innitCardPosition() {
+        boardView.getCardViews().removeAll(cardViews);
+        cardViews.clear();
         for (Card card : cardPosition.getCards()) {
             CardView cardView = new CardView(card, this);
             cardViews.add(cardView);
-            setCardViewPos(cardView);
-
             boardView.addCardView(cardView);
         }
+        innitCardViewPositions();
     }
 
     private void innitCardViewPositions() {
@@ -63,13 +65,37 @@ public class CardPositionView implements Drawable {
         innitCardViewPositions();
     }
 
-    public List<CardView> getCardsAfter(CardView cardView) {
+    public int placementDistanceFromPoint(Point point) {
+        return (int) getTopCardPosition().distance(point);
+    }
+
+    private Point getTopCardPosition() {
+        if (cardViews.size() == 0) {
+            return point;
+        } else {
+            return getTopCardView().getPoint();
+        }
+    }
+
+    public CardView getTopCardView() {
+        if (cardViews.size() == 0) {
+            return null;
+        } else {
+            return cardViews.get(cardViews.size() - 1);
+        }
+    }
+
+    public List<CardView> getCardsAfterCard(CardView cardView) {
         int index = cardViews.indexOf(cardView);
         if (index == -1) {
-            System.err.println("GetCardsAfter CardView not part of positions. index -1");
+            System.err.println("getCardsAfterCard CardView not part of positions. index -1");
             return null;
         }
         return cardViews.subList(index, cardViews.size());
+    }
+
+    public CardPosition getCardPosition() {
+        return cardPosition;
     }
 
     @Override
@@ -80,5 +106,11 @@ public class CardPositionView implements Drawable {
         g.fillRect(x, y, CardView.CARD_WIDTH, CardView.CARD_HEIGHT);
         g.setColor(Color.WHITE);
         g.drawRect(x, y, CardView.CARD_WIDTH, CardView.CARD_HEIGHT);
+    }
+
+    @Override
+    public void updateView() {
+        innitCardPosition();
+        boardView.notifyListener();
     }
 }

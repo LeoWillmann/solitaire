@@ -7,10 +7,10 @@ import org.example.model.board.gameRules.GameRule;
 public class SameSuitRule extends GameRule {
 
     @Override
-    public boolean validateMove(CardPosition cardPosition, Card card) {
-        if (cardPosition.numberOfCards() == 0) {
+    public boolean validateMove(CardPosition cardPosition, Card topCard, Card card) {
+        if (cardPosition.isEmpty()) {
             return true;
         }
-        return cardPosition.getTopCard().suit() == card.suit();
+        return topCard.suit() == card.suit();
     }
 }

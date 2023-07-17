@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.view.BoardView;
 import org.example.view.objects.CardPositionView;
@@ -7,15 +8,16 @@ import org.example.view.objects.CardView;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.example.view.objects.CardPositionView.CARD_VERTICAL_DISTANCE;
 
 public class MouseMovementListener extends MouseAdapter {
 
+    //    private static final int CARDVIEW_DISTANCE_MAX = CardView.
     private final BoardView boardView;
     private List<CardView> cardViewList = null;
-
     private int xOffset;
     private int yOffset;
 
@@ -30,11 +32,14 @@ public class MouseMovementListener extends MouseAdapter {
 
         CardView cardView = getCardView(e);
         if (cardView != null) {
+//            cardViewList = cardView.getParent().getCardsAfterCard(cardView);
+//            cardView.getParent().removeCardViews(cardViewList);
+//            boardView.notifyListener();
 
-            cardViewList = cardView.getParent().getCardsAfter(cardView);
+
+            cardViewList = cardView.getParent().getCardsAfterCard(cardView);
             xOffset = (int) (e.getX() - cardView.getPoint().getX());
             yOffset = (int) (e.getY() - cardView.getPoint().getY());
-//            boardView.notifyListener();
         }
     }
 
@@ -77,22 +82,6 @@ public class MouseMovementListener extends MouseAdapter {
         return cardClicked;
     }
 
-    private CardView getCardViewFromCardPosition(MouseEvent e) {
-        CardPositionView cardPositionView = getCardPositionView(e);
-        if (cardPositionView == null) {
-            return null;
-        }
-        CardView cardViewed = null;
-        for (CardView cardView : cardPositionView.getCardViews()) {
-            int y1 = (int) cardView.getPoint().getY();
-            int y2 = y1 + CardView.CARD_HEIGHT;
-            if (e.getY() >= y1 && e.getY() <= y2) {
-                cardViewed = cardView;
-            }
-        }
-        return cardViewed;
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -101,8 +90,52 @@ public class MouseMovementListener extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         super.mouseReleased(e);
-        resetCardViewListPositions();
+
+        resolveCardMovement();
+
         cardViewList = null;
+    }
+
+    private void resolveCardMovement() {
+        if (cardViewList == null) {
+            return;
+        }
+
+        CardPositionView cardPositionView = getClosestCardPositionView(cardViewList.get(0));
+        if (cardPositionView == null) {
+            resetCardViewListPositions();
+            return;
+        }
+        boolean test = moveCardAction(cardPositionView, cardViewList);
+        System.out.println(test);
+    }
+
+    private boolean moveCardAction(CardPositionView cardPositionView, List<CardView> cardViews) {
+        CardPosition placePosition = cardPositionView.getCardPosition();
+        CardPosition takePosition = cardViews.get(0).getParent().getCardPosition();
+        List<Card> cards = new ArrayList<>();
+        for (CardView cardView : cardViews) {
+            cards.add(cardView.getCard());
+        }
+
+        return placePosition.requestPlacements(takePosition, cards);
+    }
+
+    private CardPositionView getClosestCardPositionView(CardView cardView) {
+        int distance = Integer.MAX_VALUE;
+        CardPositionView cpv = null;
+        for (CardPositionView cardPositionView : boardView.getCardPositionViews()) {
+            int temp = cardPositionView.placementDistanceFromPoint(cardView.getPoint());
+            if (cardPositionView != cardView.getParent() && temp < distance) {
+                distance = temp;
+                cpv = cardPositionView;
+            }
+        }
+        if (distance <= 60) {
+            return cpv;
+        } else {
+            return null;
+        }
     }
 
     private void resetCardViewListPositions() {
@@ -129,4 +162,6 @@ public class MouseMovementListener extends MouseAdapter {
         }
         return null;
     }
+
+
 }
