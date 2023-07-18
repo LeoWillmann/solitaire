@@ -2,6 +2,8 @@ package org.example.model.board.deck;
 
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
+import org.example.model.board.gameRules.GameRule;
+import org.example.model.board.gameRules.RuleContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.Random;
 public class CardDeck {
     private final List<Card> cards;
 
+    private final RuleContainer deckRules = new RuleContainer();
+
     public CardDeck(int numberOfDecks) {
         cards = new ArrayList<>();
         for (int i = 0; i < numberOfDecks; i++) {
@@ -22,6 +26,10 @@ public class CardDeck {
                 }
             }
         }
+    }
+
+    public void addDeckRule(GameRule rule) {
+        deckRules.addRule(rule);
     }
 
     public void shuffleDeck() {

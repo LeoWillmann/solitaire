@@ -3,15 +3,15 @@ package org.example.controller;
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.view.BoardView;
-import org.example.view.objects.CardPositionView;
-import org.example.view.objects.CardView;
+import org.example.view.objects.cardPositionView.CardPositionView;
+import org.example.view.objects.cardView.CardView;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.view.objects.CardPositionView.CARD_VERTICAL_DISTANCE;
+import static org.example.view.objects.cardPositionView.CardPositionView.CARD_VERTICAL_DISTANCE;
 
 public class MouseMovementListener extends MouseAdapter {
 

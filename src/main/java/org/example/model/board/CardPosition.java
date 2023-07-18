@@ -3,7 +3,7 @@ package org.example.model.board;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.gameRules.GameRule;
 import org.example.model.board.gameRules.RuleContainer;
-import org.example.view.objects.CardMovementListener;
+import org.example.view.objects.cardPositionView.CardMovementListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,6 @@ public class CardPosition {
 
     private void takeCards(List<Card> cardList) {
         cards.removeAll(cardList);
-//        cardMovementListener.takeCards(this, cardList.size());
         notifyCardMovementListener();
     }
 
@@ -87,7 +86,6 @@ public class CardPosition {
     public void placeCards(List<Card> cardList) {
         cards.addAll(cardList);
         notifyCardMovementListener();
-//        notifyCardMovementListener(this, cardList);
     }
 
     public boolean requestPlacements(CardPosition takePosition, List<Card> cardList) {

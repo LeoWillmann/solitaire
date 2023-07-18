@@ -1,4 +1,4 @@
-package org.example.model.board.gameRules.cardPlacementRules;
+package org.example.model.board.gameRules.cardPlacementRules.firstCard;
 
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;

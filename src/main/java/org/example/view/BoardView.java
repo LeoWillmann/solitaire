@@ -4,8 +4,8 @@ import org.example.controller.MouseMovementListener;
 import org.example.model.board.Board;
 import org.example.model.board.CardPosition;
 import org.example.model.innit.InnitGameBoards;
-import org.example.view.objects.CardPositionView;
-import org.example.view.objects.CardView;
+import org.example.view.objects.cardPositionView.CardPositionView;
+import org.example.view.objects.cardView.CardView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +34,7 @@ public class BoardView extends JPanel implements Listenable {
     private void innitBoardView() {
         int i = 0;
         for (CardPosition cardPosition : board.getCardPositions()) {
-            CardPositionView cardPositionView = new CardPositionView(cardPosition, true, this);
+            CardPositionView cardPositionView = new CardPositionView(cardPosition, true, true, this);
             cardPositionView.setPosition(POSX + i * (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY);
             cardPositionViews.add(cardPositionView);
             i++;

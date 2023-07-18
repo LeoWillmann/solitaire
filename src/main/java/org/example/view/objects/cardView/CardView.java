@@ -1,8 +1,11 @@
-package org.example.view.objects;
+package org.example.view.objects.cardView;
 
-import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardColor;
+import org.example.model.board.deck.card.CardSuit;
+import org.example.view.objects.cardPositionView.CardPositionView;
+import org.example.view.objects.Drawable;
+import org.example.view.util.TextureLoader;
 
 import java.awt.*;
 
@@ -55,13 +58,6 @@ public class CardView implements Drawable {
         return valueName + " of " + String.valueOf(card.suit()).toLowerCase();
     }
 
-    public void moveCard(CardPositionView cardPositionView) {
-        parent.getCardViews().remove(this);
-        parent = cardPositionView;
-        parent.getCardViews().add(this);
-        parent.setCardViewPos(this);
-    }
-
     public Card getCard() {
         return card;
     }
@@ -79,5 +75,10 @@ public class CardView implements Drawable {
         g.setColor(Color.WHITE);
         g.drawRect(x, y, CARD_WIDTH, CARD_HEIGHT);
         g.drawString(cardDescription(), x + 10, y + 20);
+        if (card.suit() == CardSuit.DIAMONDS) {
+            Image image = TextureLoader.getInstance().getTexture("suitDiamonds", 30, 50);
+            g.drawImage(image, x + 30, y + 20, this.parent.getBoardView());
+
+        }
     }
 }

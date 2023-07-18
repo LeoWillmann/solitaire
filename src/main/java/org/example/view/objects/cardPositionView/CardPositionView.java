@@ -1,8 +1,10 @@
-package org.example.view.objects;
+package org.example.view.objects.cardPositionView;
 
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.view.BoardView;
+import org.example.view.objects.Drawable;
+import org.example.view.objects.cardView.CardView;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,11 +16,13 @@ public class CardPositionView implements Drawable, CardMovementListener {
     private final List<CardView> cardViews = new ArrayList<>();
     private final Point point = new Point();
     private final boolean showAllCards;
+    private final boolean isVertical;
     private final BoardView boardView;
 
-    public CardPositionView(CardPosition cardPosition, boolean showAllCards, BoardView boardView) {
+    public CardPositionView(CardPosition cardPosition, boolean showAllCards, boolean isVertical, BoardView boardView) {
         this.cardPosition = cardPosition;
         this.showAllCards = showAllCards;
+        this.isVertical = isVertical;
         this.boardView = boardView;
 
         cardPosition.setCardMovementListener(this);
@@ -83,6 +87,10 @@ public class CardPositionView implements Drawable, CardMovementListener {
         } else {
             return cardViews.get(cardViews.size() - 1);
         }
+    }
+
+    public BoardView getBoardView() {
+        return boardView;
     }
 
     public List<CardView> getCardsAfterCard(CardView cardView) {

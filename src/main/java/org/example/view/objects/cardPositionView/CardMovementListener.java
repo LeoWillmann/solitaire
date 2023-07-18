@@ -1,4 +1,4 @@
-package org.example.view.objects;
+package org.example.view.objects.cardPositionView;
 
 import org.example.model.board.CardPosition;
 
