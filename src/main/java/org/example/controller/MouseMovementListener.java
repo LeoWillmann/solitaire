@@ -15,7 +15,7 @@ import static org.example.view.objects.cardPositionView.CardPositionView.CARD_VE
 
 public class MouseMovementListener extends MouseAdapter {
 
-    //    private static final int CARDVIEW_DISTANCE_MAX = CardView.
+    private static final int CARDVIEW_DISTANCE_MAX = 60;
     private final BoardView boardView;
     private List<CardView> cardViewList = null;
     private int xOffset;
@@ -26,21 +26,46 @@ public class MouseMovementListener extends MouseAdapter {
         this.boardView = boardView;
     }
 
+    private static List<Card> reduceCardViewToCards(List<CardView> cardViews) {
+        List<Card> cards = new ArrayList<>();
+        for (CardView cardView : cardViews) {
+            cards.add(cardView.getCard());
+        }
+        return cards;
+    }
+
     @Override
     public void mousePressed(MouseEvent e) {
         super.mousePressed(e);
 
         CardView cardView = getCardView(e);
         if (cardView != null) {
-//            cardViewList = cardView.getParent().getCardsAfterCard(cardView);
-//            cardView.getParent().removeCardViews(cardViewList);
-//            boardView.notifyListener();
-
-
             cardViewList = cardView.getParent().getCardsAfterCard(cardView);
-            xOffset = (int) (e.getX() - cardView.getPoint().getX());
-            yOffset = (int) (e.getY() - cardView.getPoint().getY());
+            List<Card> cards = reduceCardViewToCards(cardViewList);
+            if (!cardView.getParent().getCardPosition().isValidTake(cards)) {
+                cardViewList = null;
+            } else {
+                boardView.setCardViewsToTop(cardViewList);
+                boardView.setSelectedCards(cardViewList);
+                xOffset = (int) (e.getX() - cardView.getPoint().getX());
+                yOffset = (int) (e.getY() - cardView.getPoint().getY());
+            }
         }
+
+        if (isOnDeck(e)) {
+            boardView.getDeckView().getDeck().dealCardsToCardPool(boardView.getCardPool().getCardPosition());
+        }
+    }
+
+    private boolean isOnDeck(MouseEvent e) {
+        int x1 = (int) boardView.getDeckView().getPoint().getX();
+        int y1 = (int) boardView.getDeckView().getPoint().getY();
+        int x2 = x1 + CardView.CARD_WIDTH;
+        int y2 = y1 + CardView.CARD_HEIGHT;
+        if (e.getX() >= x1 && e.getX() <= x2 && e.getY() >= y1 && e.getY() <= y2) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -65,7 +90,6 @@ public class MouseMovementListener extends MouseAdapter {
             cardView.setPosition(e.getX() - xOffset, y);
             y += CARD_VERTICAL_DISTANCE;
         }
-        boardView.setCardViewsToTop(cardViewList);
     }
 
     private CardView getCardView(MouseEvent e) {
@@ -90,7 +114,7 @@ public class MouseMovementListener extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         super.mouseReleased(e);
-
+        boardView.clearSelectedCards();
         resolveCardMovement();
 
         cardViewList = null;
@@ -102,21 +126,15 @@ public class MouseMovementListener extends MouseAdapter {
         }
 
         CardPositionView cardPositionView = getClosestCardPositionView(cardViewList.get(0));
-        if (cardPositionView == null) {
+        if (cardPositionView == null || !moveCardAction(cardPositionView, cardViewList)) {
             resetCardViewListPositions();
-            return;
         }
-        boolean test = moveCardAction(cardPositionView, cardViewList);
-        System.out.println(test);
     }
 
     private boolean moveCardAction(CardPositionView cardPositionView, List<CardView> cardViews) {
         CardPosition placePosition = cardPositionView.getCardPosition();
         CardPosition takePosition = cardViews.get(0).getParent().getCardPosition();
-        List<Card> cards = new ArrayList<>();
-        for (CardView cardView : cardViews) {
-            cards.add(cardView.getCard());
-        }
+        List<Card> cards = reduceCardViewToCards(cardViews);
 
         return placePosition.requestPlacements(takePosition, cards);
     }
@@ -131,7 +149,7 @@ public class MouseMovementListener extends MouseAdapter {
                 cpv = cardPositionView;
             }
         }
-        if (distance <= 60) {
+        if (distance <= CARDVIEW_DISTANCE_MAX) {
             return cpv;
         } else {
             return null;

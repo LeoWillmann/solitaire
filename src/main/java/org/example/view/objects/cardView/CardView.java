@@ -23,7 +23,6 @@ public class CardView implements Drawable {
     public CardView(Card card, CardPositionView parent) {
         this.card = card;
         this.parent = parent;
-//        parent.setCardViewPos(this);
         if (card.suit().getColor() == CardColor.RED) {
             color = Color.RED;
         } else {

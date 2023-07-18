@@ -12,17 +12,18 @@ import java.util.List;
 
 public class CardPositionView implements Drawable, CardMovementListener {
     public static final int CARD_VERTICAL_DISTANCE = 30;
+    public static final int CARD_HORIZONTAL_DISTANCE = 30;
     private final CardPosition cardPosition;
     private final List<CardView> cardViews = new ArrayList<>();
     private final Point point = new Point();
-    private final boolean showAllCards;
-    private final boolean isVertical;
+    private final int maxCardDraw;
+    private final boolean isVerticalDraw;
     private final BoardView boardView;
 
-    public CardPositionView(CardPosition cardPosition, boolean showAllCards, boolean isVertical, BoardView boardView) {
+    public CardPositionView(CardPosition cardPosition, int maxCardDraw, boolean isVerticalDraw, BoardView boardView) {
         this.cardPosition = cardPosition;
-        this.showAllCards = showAllCards;
-        this.isVertical = isVertical;
+        this.maxCardDraw = maxCardDraw;
+        this.isVerticalDraw = isVerticalDraw;
         this.boardView = boardView;
 
         cardPosition.setCardMovementListener(this);
@@ -55,13 +56,30 @@ public class CardPositionView implements Drawable, CardMovementListener {
     }
 
     public void setCardViewPos(CardView cardView) {
-        if (showAllCards) {
-            int index = cardViews.indexOf(cardView);
-            if (index == -1) {
-                return;
-            }
-            cardView.setPosition((int) point.getX(), (int) (point.getY() + index * CARD_VERTICAL_DISTANCE));
+        int index = cardViews.indexOf(cardView);
+        if (index == -1) {
+            return;
         }
+        int x = (int) point.getX();
+        int y = (int) point.getY();
+
+        if (maxCardDraw == -1 || cardViews.size() <= maxCardDraw) {
+            if (isVerticalDraw) {
+                y += index * CARD_VERTICAL_DISTANCE;
+            } else {
+                x += index * CARD_HORIZONTAL_DISTANCE;
+            }
+        } else {
+            if (cardViews.size() - index <= maxCardDraw) {
+                int position = maxCardDraw - cardViews.size() + index;
+                if (isVerticalDraw) {
+                    y += position * CARD_VERTICAL_DISTANCE;
+                } else {
+                    x += position * CARD_HORIZONTAL_DISTANCE;
+                }
+            }
+        }
+        cardView.setPosition(x, y);
     }
 
     public void setPosition(int x, int y) {
@@ -114,6 +132,10 @@ public class CardPositionView implements Drawable, CardMovementListener {
         g.fillRect(x, y, CardView.CARD_WIDTH, CardView.CARD_HEIGHT);
         g.setColor(Color.WHITE);
         g.drawRect(x, y, CardView.CARD_WIDTH, CardView.CARD_HEIGHT);
+
+        for (CardView cardView : cardViews) {
+            cardView.draw(g);
+        }
     }
 
     @Override

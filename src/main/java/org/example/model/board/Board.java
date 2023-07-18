@@ -1,8 +1,8 @@
 package org.example.model.board;
 
 import org.example.model.board.deck.CardDeck;
-import org.example.model.board.gameRules.GameRule;
-import org.example.model.board.gameRules.RuleContainer;
+import org.example.model.board.gameRules.FalseRule;
+import org.example.model.board.gameRules.cardTakeRules.SingleTakeRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,13 @@ import java.util.List;
 public class Board {
     private final List<CardPosition> cardPositions = new ArrayList<>();
     private final CardDeck deck;
+    private final CardPosition cardPool;
 
     public Board(CardDeck deck) {
         this.deck = deck;
+        cardPool = new CardPosition();
+        cardPool.addPlacementRule(new FalseRule());
+        cardPool.addTakeRule(new SingleTakeRule());
     }
 
     public void addCardPosition(CardPosition cardPosition) {
@@ -28,5 +32,9 @@ public class Board {
 
     public CardDeck getDeck() {
         return deck;
+    }
+
+    public CardPosition getCardPool() {
+        return cardPool;
     }
 }

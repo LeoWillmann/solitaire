@@ -8,6 +8,8 @@ import org.example.model.board.deck.card.CardSuit;
 import org.example.model.board.gameRules.RuleContainer;
 import org.example.model.board.gameRules.cardPlacementRules.*;
 import org.example.model.board.gameRules.cardPlacementRules.firstCard.FirstCardIdRule;
+import org.example.model.board.gameRules.cardTakeRules.MultiTakeRule;
+import org.example.model.board.gameRules.cardTakeRules.SingleTakeRule;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +17,7 @@ import java.util.Collections;
 public class InnitGameBoards {
     public static Board makeSolitaire() {
         CardDeck cardDeck = new CardDeck(1);
+        cardDeck.setDrawNumberOfCards(3);
         cardDeck.shuffleDeck();
         Board board = new Board(cardDeck);
         innitPositions(board);
@@ -33,6 +36,7 @@ public class InnitGameBoards {
         placementRule.addRule(new DifferentSuitColorRule());
         placementRule.addRule(new DescendingCardsRule());
         placementRule.addRule(new FirstCardIdRule(13));
+        takeRule.addRule(new MultiTakeRule());
         for (int i = 0; i < 7; i++) {
             CardPosition cardPosition = new CardPosition(placementRule, takeRule);
             board.addCardPosition(cardPosition);
@@ -44,6 +48,7 @@ public class InnitGameBoards {
             cardPosition.addPlacementRule(new FirstCardIdRule(1));
             cardPosition.addPlacementRule(new CardSuitRule(suit));
             cardPosition.addPlacementRule(new AscendingCardsRule());
+            cardPosition.addTakeRule(new SingleTakeRule());
             board.addCardPosition(cardPosition);
         }
     }

@@ -69,16 +69,18 @@ public class CardPosition {
         return -1;
     }
 
-    private void takeCards(List<Card> cardList) {
+    public void takeCards(List<Card> cardList) {
         cards.removeAll(cardList);
         notifyCardMovementListener();
     }
 
     public boolean isValidTake(List<Card> cardsToTake) {
+        Card nextCard = null;
         for (Card card : cardsToTake) {
-            if (!takeRule.checkRules(this, null, card)) {
+            if (!takeRule.checkRules(this, nextCard, card)) {
                 return false;
             }
+            nextCard = card;
         }
         return true;
     }
