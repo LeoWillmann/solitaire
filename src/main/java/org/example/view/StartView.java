@@ -1,5 +1,7 @@
 package org.example.view;
 
+import org.example.view.objects.InnitBoardView;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,7 +20,7 @@ public class StartView {
         frame.setLocationRelativeTo(null); // set no relative location
         frame.setVisible(true); // sets frame to visible
 
-        frame.add(new BoardView());
+        frame.add(InnitBoardView.napoleon());
     }
 
 

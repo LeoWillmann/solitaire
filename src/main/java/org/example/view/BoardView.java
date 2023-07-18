@@ -10,34 +10,46 @@ import org.example.view.objects.cardView.CardView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BoardView extends JPanel implements Listenable {
 
+    public static final int HORIZONTAL_COLUMN_DISTANCE = 30;
+    public static final int VERTICAL_COLUMN_DISTANCE = 30;
     private static final int POSX = 100;
     private static final int POSY = 0;
-    private static final int HORIZONTAL_COLUMN_DISTANCE = 30;
-    private static final int VERTICAL_COLUMN_DISTANCE = 30;
+    private final Point point = new Point(POSX, POSY);
     private final List<CardPositionView> cardPositionViews = new ArrayList<>();
     private final List<CardView> cardViews = new ArrayList<>();
     private final List<CardView> selectedCards = new ArrayList<>();
-    private final Board board;
     private final CardDeckView deckView;
     private final CardPositionView cardPool;
+    private Board board;
 
-    public BoardView() {
-        board = InnitGameBoards.makeSolitaire();
+    public BoardView(Board board) {
+        this.board = board;
         deckView = new CardDeckView(board.getDeck());
         deckView.setPosition(POSX, POSY);
         cardPool = new CardPositionView(board.getCardPool(), board.getDeck().getDrawNumberOfCards(), false, this);
         cardPool.setPosition(POSX + (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY);
-        innitBoardView();
 
         MouseMovementListener mouseMovementListener = new MouseMovementListener(this);
         addMouseListener(mouseMovementListener);
         addMouseMotionListener(mouseMovementListener);
+    }
 
+    public Point getPoint() {
+        return point;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     public CardPositionView getCardPool() {
@@ -46,24 +58,6 @@ public class BoardView extends JPanel implements Listenable {
 
     public CardDeckView getDeckView() {
         return deckView;
-    }
-
-    private void innitBoardView() {
-        int j = 0;
-        for (int i = 0; i < 7; i++) {
-            CardPositionView cardPositionView = new CardPositionView(board.getCardPositions().get(j), -1, true, this);
-            cardPositionView.setPosition(POSX + j * (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY + CardView.CARD_HEIGHT + VERTICAL_COLUMN_DISTANCE);
-            cardPositionViews.add(cardPositionView);
-            j++;
-        }
-
-        for (int i = 0; i < 4; i++) {
-            CardPositionView cardPositionView = new CardPositionView(board.getCardPositions().get(j), 1, true, this);
-            cardPositionView.setPosition(POSX + i * (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE) + 400, POSY);
-            cardPositionViews.add(cardPositionView);
-            j++;
-        }
-
     }
 
     public void setSelectedCards(List<CardView> selectedCards) {

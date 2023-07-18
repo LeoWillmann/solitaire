@@ -29,6 +29,10 @@ public class CardDeck {
         }
     }
 
+    public int numberOfCardsInDeck() {
+        return cards.size();
+    }
+
     public int getDrawNumberOfCards() {
         return drawNumberOfCards;
     }

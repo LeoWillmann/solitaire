@@ -5,6 +5,8 @@ import org.example.model.board.CardPosition;
 import org.example.model.board.deck.CardDeck;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
+import org.example.model.board.gameRules.FalseRule;
+import org.example.model.board.gameRules.OrRule;
 import org.example.model.board.gameRules.RuleContainer;
 import org.example.model.board.gameRules.cardPlacementRules.*;
 import org.example.model.board.gameRules.cardPlacementRules.firstCard.FirstCardIdRule;
@@ -20,7 +22,7 @@ public class InnitGameBoards {
         cardDeck.setDrawNumberOfCards(3);
         cardDeck.shuffleDeck();
         Board board = new Board(cardDeck);
-        innitPositions(board);
+        innitSolitairePositions(board);
         return board;
     }
 
@@ -30,7 +32,7 @@ public class InnitGameBoards {
         }
     }
 
-    private static void innitPositions(Board board) {
+    private static void innitSolitairePositions(Board board) {
         RuleContainer placementRule = new RuleContainer();
         RuleContainer takeRule = new RuleContainer();
         placementRule.addRule(new DifferentSuitColorRule());
@@ -52,4 +54,48 @@ public class InnitGameBoards {
             board.addCardPosition(cardPosition);
         }
     }
+
+    public static Board makeGrandNapoleon() {
+        CardDeck cardDeck = new CardDeck(2);
+        cardDeck.shuffleDeck();
+        Board board = new Board(cardDeck);
+        innitNapoleonPositions(board);
+        return board;
+    }
+
+    private static void innitNapoleonPositions(Board board) {
+        RuleContainer placementRule = new RuleContainer();
+        RuleContainer takeRule = new RuleContainer();
+        placementRule.addRule(new SameSuitRule());
+        placementRule.addRule(new OrRule(new DescendingCardsRule(), new AscendingCardsRule()));
+        takeRule.addRule(new SingleTakeRule());
+        for (int i = 0; i < 11; i++) {
+            CardPosition cardPosition = new CardPosition(placementRule, takeRule);
+            board.addCardPosition(cardPosition);
+        }
+
+        for (CardSuit suit : CardSuit.values()) {
+            CardPosition cardPosition = new CardPosition();
+            cardPosition.addPlacementRule(new FirstCardIdRule(1));
+            cardPosition.addPlacementRule(new CardSuitRule(suit));
+            cardPosition.addPlacementRule(new AscendingCardsRule());
+            cardPosition.addTakeRule(new FalseRule());
+            board.addCardPosition(cardPosition);
+        }
+        for (CardSuit suit : CardSuit.values()) {
+            CardPosition cardPosition = new CardPosition();
+            cardPosition.addPlacementRule(new FirstCardIdRule(13));
+            cardPosition.addPlacementRule(new CardSuitRule(suit));
+            cardPosition.addPlacementRule(new DescendingCardsRule());
+            cardPosition.addTakeRule(new FalseRule());
+            board.addCardPosition(cardPosition);
+        }
+
+        int i = 0;
+        while (board.getDeck().numberOfCardsInDeck() > 0) {
+            dealCards(board, board.getCardPositions().get(i % 11), 1);
+            i++;
+        }
+    }
+
 }
