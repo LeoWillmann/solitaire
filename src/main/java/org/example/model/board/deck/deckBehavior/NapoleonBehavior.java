@@ -27,11 +27,9 @@ public class NapoleonBehavior extends DeckBehavior {
         while (deck.numberOfCardsInDeck() > 0) {
             List<Card> cards = new ArrayList<>(Collections.singleton(deck.takeCard()));
             CardPosition cardPosition = ifPossibleToPlace(cards);
-            if (cardPosition == null) {
-                commonPositions.get(i % deckProperty).placeCards(cards);
-                i++;
-            } else {
-                cardPosition.placeCards(cards);
+            commonPositions.get(i % deckProperty).placeCards(cards);
+            i++;
+            if (cardPosition != null) {
                 checkPositions();
             }
         }

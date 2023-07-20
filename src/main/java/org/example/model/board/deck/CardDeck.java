@@ -1,6 +1,5 @@
 package org.example.model.board.deck;
 
-import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
 import org.example.model.board.deck.deckBehavior.DeckBehavior;
@@ -8,7 +7,6 @@ import org.example.model.board.gameRules.GameRule;
 import org.example.model.board.gameRules.RuleContainer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -53,6 +51,7 @@ public class CardDeck {
         cards.clear();
 
         Random random = new Random();
+        random.setSeed(12344);
         while (deck.size() > 0) {
             Card randomCard = deck.get(random.nextInt(deck.size()));
             deck.remove(randomCard);

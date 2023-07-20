@@ -69,10 +69,15 @@ public class CardPosition {
         return -1;
     }
 
-    public Card takeTopCard() {
-        Card card = getTopCard();
-        cards.remove(card);
-        return card;
+    public void takeTopCard() {
+        cards.remove(cards.size() - 1);
+        notifyCardMovementListener();
+    }
+
+    public void takeTopCards(int i) {
+        for (int j = 0; j < i; j++) {
+            takeTopCard();
+        }
     }
 
     public void takeCards(List<Card> cardList) {
@@ -106,7 +111,7 @@ public class CardPosition {
 
     public boolean requestPlacements(CardPosition takePosition, List<Card> cardList) {
         if (takePosition.isValidTake(cardList) && this.isValidPlacement(getTopCard(), cardList)) {
-            takePosition.takeCards(cardList);
+            takePosition.takeTopCards(cardList.size());
             this.placeCards(cardList);
             return true;
         }
