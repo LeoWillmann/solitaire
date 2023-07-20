@@ -33,7 +33,7 @@ public class InnitBoardView {
     }
 
     public static BoardView napoleon() {
-        BoardView boardView = new BoardView(InnitGameBoards.makeGrandNapoleon());
+        BoardView boardView = new BoardView(InnitGameBoards.makeGrandNapoleon(11));
         innitNapoleon(boardView);
 
         return boardView;

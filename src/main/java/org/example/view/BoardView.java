@@ -32,7 +32,7 @@ public class BoardView extends JPanel implements Listenable {
         this.board = board;
         deckView = new CardDeckView(board.getDeck());
         deckView.setPosition(POSX, POSY);
-        cardPool = new CardPositionView(board.getCardPool(), board.getDeck().getDrawNumberOfCards(), false, this);
+        cardPool = new CardPositionView(board.getCardPool(), board.getDeck().getDeckBehavior().getDeckProperty(), false, this);
         cardPool.setPosition(POSX + (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY);
 
         MouseMovementListener mouseMovementListener = new MouseMovementListener(this);

@@ -3,6 +3,8 @@ package org.example.model.innit;
 import org.example.model.board.Board;
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.CardDeck;
+import org.example.model.board.deck.deckBehavior.NapoleonBehavior;
+import org.example.model.board.deck.deckBehavior.NormalCardDeal;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
 import org.example.model.board.gameRules.FalseRule;
@@ -12,23 +14,25 @@ import org.example.model.board.gameRules.cardPlacementRules.*;
 import org.example.model.board.gameRules.cardPlacementRules.firstCard.FirstCardIdRule;
 import org.example.model.board.gameRules.cardTakeRules.MultiTakeRule;
 import org.example.model.board.gameRules.cardTakeRules.SingleTakeRule;
+import org.example.view.objects.cardPositionView.CardPositionView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class InnitGameBoards {
     public static Board makeSolitaire() {
-        CardDeck cardDeck = new CardDeck(1);
-        cardDeck.setDrawNumberOfCards(3);
+        Board board = new Board();
+        CardDeck cardDeck = new CardDeck(1, new NormalCardDeal(3, board.getCardPool()));
         cardDeck.shuffleDeck();
-        Board board = new Board(cardDeck);
+        board.setDeck(cardDeck);
         innitSolitairePositions(board);
         return board;
     }
 
     private static void dealCards(Board board, CardPosition cardPosition, int cards) {
         for (int i = 0; i < cards; i++) {
-            cardPosition.placeCards(new ArrayList<Card>(Collections.singleton(board.getDeck().takeCard())));
+            cardPosition.placeCard(board.getDeck().takeCard());
         }
     }
 
@@ -55,21 +59,23 @@ public class InnitGameBoards {
         }
     }
 
-    public static Board makeGrandNapoleon() {
-        CardDeck cardDeck = new CardDeck(2);
+    public static Board makeGrandNapoleon(int columns) {
+        Board board = new Board();
+        innitNapoleonPositions(board, columns);
+        CardDeck cardDeck = new CardDeck(2, new NapoleonBehavior(
+                board.getCardPositions().subList(0, columns), board.getCardPositions().subList(columns, columns + 8)));
         cardDeck.shuffleDeck();
-        Board board = new Board(cardDeck);
-        innitNapoleonPositions(board);
+        board.setDeck(cardDeck);
         return board;
     }
 
-    private static void innitNapoleonPositions(Board board) {
+    private static void innitNapoleonPositions(Board board, int columns) {
         RuleContainer placementRule = new RuleContainer();
         RuleContainer takeRule = new RuleContainer();
         placementRule.addRule(new SameSuitRule());
         placementRule.addRule(new OrRule(new DescendingCardsRule(), new AscendingCardsRule()));
         takeRule.addRule(new SingleTakeRule());
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < columns; i++) {
             CardPosition cardPosition = new CardPosition(placementRule, takeRule);
             board.addCardPosition(cardPosition);
         }
@@ -82,19 +88,14 @@ public class InnitGameBoards {
             cardPosition.addTakeRule(new FalseRule());
             board.addCardPosition(cardPosition);
         }
-        for (CardSuit suit : CardSuit.values()) {
+
+        for (int i = CardSuit.values().length - 1; i >= 0; i--) {
             CardPosition cardPosition = new CardPosition();
             cardPosition.addPlacementRule(new FirstCardIdRule(13));
-            cardPosition.addPlacementRule(new CardSuitRule(suit));
+            cardPosition.addPlacementRule(new CardSuitRule(CardSuit.values()[i]));
             cardPosition.addPlacementRule(new DescendingCardsRule());
             cardPosition.addTakeRule(new FalseRule());
             board.addCardPosition(cardPosition);
-        }
-
-        int i = 0;
-        while (board.getDeck().numberOfCardsInDeck() > 0) {
-            dealCards(board, board.getCardPositions().get(i % 11), 1);
-            i++;
         }
     }
 

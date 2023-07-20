@@ -53,7 +53,7 @@ public class MouseMovementListener extends MouseAdapter {
         }
 
         if (isOnDeck(e)) {
-            boardView.getDeckView().getDeck().dealCardsToCardPool(boardView.getCardPool().getCardPosition());
+            boardView.getDeckView().getDeck().performAction();
         }
     }
 

@@ -1,19 +1,27 @@
 package org.example.model.board.deck.card;
 
+import java.awt.*;
+
 public enum CardSuit {
-    CLUBS(CardColor.BLACK),
-    SPADES(CardColor.BLACK),
-    HEARTS(CardColor.RED),
-    DIAMONDS(CardColor.RED);
+    CLUBS(Color.BLACK, "Clubs"),
+    SPADES(Color.BLACK, "Spades"),
+    HEARTS(Color.RED, "Hearts"),
+    DIAMONDS(Color.RED, "Diamonds");
 
-    private final CardColor color;
     private static final CardSuit[] values = values();
+    private final Color color;
+    private final String description;
 
-    CardSuit(CardColor color) {
+    CardSuit(Color color, String description) {
         this.color = color;
+        this.description = description;
     }
 
-    public CardColor getColor() {
+    public String getDescription() {
+        return description;
+    }
+
+    public Color getColor() {
         return color;
     }
 

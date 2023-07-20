@@ -69,6 +69,12 @@ public class CardPosition {
         return -1;
     }
 
+    public Card takeTopCard() {
+        Card card = getTopCard();
+        cards.remove(card);
+        return card;
+    }
+
     public void takeCards(List<Card> cardList) {
         cards.removeAll(cardList);
         notifyCardMovementListener();
@@ -86,8 +92,16 @@ public class CardPosition {
     }
 
     public void placeCards(List<Card> cardList) {
-        cards.addAll(cardList);
-        notifyCardMovementListener();
+        for (Card card : cardList) {
+            placeCard(card);
+        }
+    }
+
+    public void placeCard(Card card) {
+        if (card != null) {
+            cards.add(card);
+            notifyCardMovementListener();
+        }
     }
 
     public boolean requestPlacements(CardPosition takePosition, List<Card> cardList) {

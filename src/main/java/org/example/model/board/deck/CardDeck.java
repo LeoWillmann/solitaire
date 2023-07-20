@@ -3,10 +3,12 @@ package org.example.model.board.deck;
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
+import org.example.model.board.deck.deckBehavior.DeckBehavior;
 import org.example.model.board.gameRules.GameRule;
 import org.example.model.board.gameRules.RuleContainer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -16,9 +18,10 @@ import java.util.Random;
 public class CardDeck {
     private final List<Card> cards;
     private final RuleContainer deckRules = new RuleContainer();
-    private int drawNumberOfCards = 1;
+    private final DeckBehavior deckBehavior;
 
-    public CardDeck(int numberOfDecks) {
+    public CardDeck(int numberOfDecks, DeckBehavior deckBehavior) {
+        this.deckBehavior = deckBehavior;
         cards = new ArrayList<>();
         for (int i = 0; i < numberOfDecks; i++) {
             for (CardSuit suit : CardSuit.values()) {
@@ -29,16 +32,16 @@ public class CardDeck {
         }
     }
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public DeckBehavior getDeckBehavior() {
+        return deckBehavior;
+    }
+
     public int numberOfCardsInDeck() {
         return cards.size();
-    }
-
-    public int getDrawNumberOfCards() {
-        return drawNumberOfCards;
-    }
-
-    public void setDrawNumberOfCards(int drawNumberOfCards) {
-        this.drawNumberOfCards = drawNumberOfCards;
     }
 
     public void addDeckRule(GameRule rule) {
@@ -66,19 +69,7 @@ public class CardDeck {
         return card;
     }
 
-    public void dealCardsToCardPool(CardPosition cardPosition) {
-        List<Card> dealCards = new ArrayList<>();
-        for (int i = 0; i < drawNumberOfCards; i++) {
-            if (cards.size() == 0) {
-                cards.addAll(cardPosition.getCards());
-                cardPosition.takeCards(cardPosition.getCards());
-                if (cards.size() == 0) {
-                    cardPosition.placeCards(dealCards);
-                    return;
-                }
-            }
-            dealCards.add(takeCard());
-        }
-        cardPosition.placeCards(dealCards);
+    public void performAction() {
+        deckBehavior.dealCards(this);
     }
 }

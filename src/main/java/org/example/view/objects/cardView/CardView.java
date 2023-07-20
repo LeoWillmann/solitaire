@@ -1,7 +1,6 @@
 package org.example.view.objects.cardView;
 
 import org.example.model.board.deck.card.Card;
-import org.example.model.board.deck.card.CardColor;
 import org.example.model.board.deck.card.CardSuit;
 import org.example.view.objects.cardPositionView.CardPositionView;
 import org.example.view.objects.Drawable;
@@ -13,33 +12,21 @@ public class CardView implements Drawable {
 
     public static final int CARD_WIDTH = 120;
     public static final int CARD_HEIGHT = 150;
-    private static final Color DEFAULT_COLOR = Color.BLUE;
-    private static final Color SELECT_COLOR = Color.RED;
     private final Card card;
     private final Point point = new Point();
-    private CardPositionView parent;
-    private Color color;
+    private final CardPositionView parent;
+    private final String textureName;
+    private final Color color;
 
     public CardView(Card card, CardPositionView parent) {
         this.card = card;
         this.parent = parent;
-        if (card.suit().getColor() == CardColor.RED) {
-            color = Color.RED;
-        } else {
-            color = Color.blue;
-        }
+        color = card.suit().getColor();
+        textureName = "suit" + card.suit().getDescription();
     }
 
     public CardPositionView getParent() {
         return parent;
-    }
-
-    public void selectColor() {
-        color = SELECT_COLOR;
-    }
-
-    public void defaultColor() {
-        color = DEFAULT_COLOR;
     }
 
     public Point getPoint() {
@@ -48,13 +35,12 @@ public class CardView implements Drawable {
 
     public String cardDescription() {
         String valueName = switch (card.cardValue()) {
-            case 1 -> "ace";
-            case 11 -> "jack";
-            case 12 -> "queen";
-            case 13 -> "king";
+            case 11 -> "J";
+            case 12 -> "Q";
+            case 13 -> "K";
             default -> String.valueOf(card.cardValue());
         };
-        return valueName + " of " + String.valueOf(card.suit()).toLowerCase();
+        return valueName;
     }
 
     public Card getCard() {
@@ -69,15 +55,15 @@ public class CardView implements Drawable {
     public void draw(Graphics g) {
         int x = (int) point.getX();
         int y = (int) point.getY();
-        g.setColor(color);
-        g.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
         g.setColor(Color.WHITE);
+        g.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
+        g.setColor(Color.BLACK);
         g.drawRect(x, y, CARD_WIDTH, CARD_HEIGHT);
-        g.drawString(cardDescription(), x + 10, y + 20);
-        if (card.suit() == CardSuit.DIAMONDS) {
-            Image image = TextureLoader.getInstance().getTexture("suitDiamonds", 30, 50);
-            g.drawImage(image, x + 30, y + 20, this.parent.getBoardView());
+        g.setColor(color);
+        g.setFont(new Font("Helvetica Bold", Font.BOLD, 20));
+        g.drawString(cardDescription(), x, y + 20);
+        Image image = TextureLoader.getInstance().getTexture(textureName, 20, 20);
+        g.drawImage(image, x, y + 20, this.parent.getBoardView());
 
-        }
     }
 }

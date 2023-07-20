@@ -12,11 +12,10 @@ import java.util.List;
  */
 public class Board {
     private final List<CardPosition> cardPositions = new ArrayList<>();
-    private final CardDeck deck;
     private final CardPosition cardPool;
+    private CardDeck deck;
 
-    public Board(CardDeck deck) {
-        this.deck = deck;
+    public Board() {
         cardPool = new CardPosition();
         cardPool.addPlacementRule(new FalseRule());
         cardPool.addTakeRule(new SingleTakeRule());
@@ -32,6 +31,10 @@ public class Board {
 
     public CardDeck getDeck() {
         return deck;
+    }
+
+    public void setDeck(CardDeck deck) {
+        this.deck = deck;
     }
 
     public CardPosition getCardPool() {
