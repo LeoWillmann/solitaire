@@ -19,7 +19,7 @@ public class BoardView extends JPanel implements Listenable {
     public static final int HORIZONTAL_COLUMN_DISTANCE = 30;
     public static final int VERTICAL_COLUMN_DISTANCE = 30;
     private static final int POSX = 100;
-    private static final int POSY = 0;
+    private static final int POSY = 100;
     private final Point point = new Point(POSX, POSY);
     private final List<CardPositionView> cardPositionViews = new ArrayList<>();
     private final List<CardView> cardViews = new ArrayList<>();

@@ -7,6 +7,7 @@ import org.example.model.board.deck.deckBehavior.NapoleonBehavior;
 import org.example.model.board.deck.deckBehavior.NormalCardDeal;
 import org.example.model.board.deck.card.CardSuit;
 import org.example.model.board.gameRules.FalseRule;
+import org.example.model.board.gameRules.OrRule;
 import org.example.model.board.gameRules.ruleContainers.AndCheckable;
 import org.example.model.board.gameRules.ruleContainers.AtomicCheckable;
 import org.example.model.board.gameRules.ruleContainers.OrCheckable;
@@ -72,10 +73,16 @@ public class InnitGameBoards {
         placementRule.addRule(new AtomicCheckable(new SameSuitRule()));
         {
             OrCheckable orCheckable = new OrCheckable();
-            orCheckable.addRule(new AtomicCheckable(new DescendingCardsRule()));
-            orCheckable.addRule(new AtomicCheckable(new AscendingCardsRule()));
-            orCheckable.addRule(new AtomicCheckable(new CustomPlaceIdRule(1, board.getDeck().getMaxCardValue())));
-            orCheckable.addRule(new AtomicCheckable(new CustomPlaceIdRule(board.getDeck().getMaxCardValue(), 1)));
+            OrRule orRule = new OrRule();
+            orRule.addRule(new DescendingCardsRule());
+            orRule.addRule(new AscendingCardsRule());
+            orRule.addRule(new CustomPlaceIdRule(board.getDeck().getMaxCardValue(), 1));
+            orRule.addRule(new CustomPlaceIdRule(1, board.getDeck().getMaxCardValue()));
+            orCheckable.addRule(new AtomicCheckable(orRule));
+//            orCheckable.addRule(new AtomicCheckable(new DescendingCardsRule()));
+//            orCheckable.addRule(new AtomicCheckable(new AscendingCardsRule()));
+//            orCheckable.addRule(new AtomicCheckable(new CustomPlaceIdRule(1, board.getDeck().getMaxCardValue())));
+//            orCheckable.addRule(new AtomicCheckable(new CustomPlaceIdRule(board.getDeck().getMaxCardValue(), 1)));
             placementRule.addRule(orCheckable);
         }
 
