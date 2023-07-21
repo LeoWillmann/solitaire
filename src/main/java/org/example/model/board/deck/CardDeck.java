@@ -3,8 +3,7 @@ package org.example.model.board.deck;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
 import org.example.model.board.deck.deckBehavior.DeckBehavior;
-import org.example.model.board.gameRules.GameRule;
-import org.example.model.board.gameRules.RuleContainer;
+import org.example.model.board.gameRules.ruleContainers.trash.RuleContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +13,28 @@ import java.util.Random;
  * A deck of cards.
  */
 public class CardDeck {
+    private static final int MAX_CARD_VALUE = 13;
     private final List<Card> cards;
     private final RuleContainer deckRules = new RuleContainer();
-    private final DeckBehavior deckBehavior;
+    private DeckBehavior deckBehavior;
 
-    public CardDeck(int numberOfDecks, DeckBehavior deckBehavior) {
-        this.deckBehavior = deckBehavior;
+    public CardDeck(int numberOfDecks) {
         cards = new ArrayList<>();
         for (int i = 0; i < numberOfDecks; i++) {
             for (CardSuit suit : CardSuit.values()) {
-                for (int j = 0; j < 13; j++) {
+                for (int j = 0; j < MAX_CARD_VALUE; j++) {
                     cards.add(new Card(j + 1, suit, true));
                 }
             }
         }
+    }
+
+    public RuleContainer getDeckRules() {
+        return deckRules;
+    }
+
+    public int getMaxCardValue() {
+        return MAX_CARD_VALUE;
     }
 
     public List<Card> getCards() {
@@ -38,13 +45,14 @@ public class CardDeck {
         return deckBehavior;
     }
 
+    public void setDeckBehavior(DeckBehavior deckBehavior) {
+        this.deckBehavior = deckBehavior;
+    }
+
     public int numberOfCardsInDeck() {
         return cards.size();
     }
 
-    public void addDeckRule(GameRule rule) {
-        deckRules.addRule(rule);
-    }
 
     public void shuffleDeck() {
         List<Card> deck = new ArrayList<>(cards);
@@ -69,6 +77,8 @@ public class CardDeck {
     }
 
     public void performAction() {
-        deckBehavior.dealCards(this);
+        if (deckBehavior != null) {
+            deckBehavior.dealCards(this);
+        }
     }
 }

@@ -6,7 +6,7 @@ import org.example.model.board.deck.card.Card;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrRule extends GameRule {
+public class AndRule extends GameRule {
     private final List<GameRule> rules = new ArrayList<>();
 
     public void addRule(GameRule rule) {
@@ -17,10 +17,10 @@ public class OrRule extends GameRule {
     public boolean validateMove(CardPosition cardPosition, Card topCard, Card card) {
 
         for (GameRule rule : rules) {
-            if (rule.validateMove(cardPosition, topCard, card)) {
-                return true;
+            if (!rule.validateMove(cardPosition, topCard, card)) {
+                return false;
             }
         }
-        return rules.isEmpty();
+        return true;
     }
 }

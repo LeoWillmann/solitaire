@@ -17,14 +17,14 @@ public class CardView implements Drawable {
     private final Card card;
     private final Point point = new Point();
     private final CardPositionView parent;
-    private final String textureName;
+    private final String suitName;
     private final Color color;
 
     public CardView(Card card, CardPositionView parent) {
         this.card = card;
         this.parent = parent;
         color = card.suit().getColor();
-        textureName = "suit" + card.suit().getDescription();
+        suitName = card.suit().getDescription();
     }
 
     public CardPositionView getParent() {
@@ -37,7 +37,7 @@ public class CardView implements Drawable {
 
     public String cardDescription() {
         String valueName = switch (card.cardValue()) {
-            case 1 -> "Ace";
+            case 1 -> "A";
             case 11 -> "J";
             case 12 -> "Q";
             case 13 -> "K";
@@ -70,24 +70,20 @@ public class CardView implements Drawable {
         int y = (int) point.getY();
         g.setColor(color);
         g.setFont(new Font("Helvetica Bold", Font.BOLD, TEXT_SIZE));
-        Image image = TextureLoader.getInstance().getTexture(textureName, TEXT_SIZE - TEXT_ICON_SPACING, TEXT_SIZE - TEXT_ICON_SPACING);
-//
+        Image image = TextureLoader.getInstance().getTexture("suit" + suitName, TEXT_SIZE - TEXT_ICON_SPACING, TEXT_SIZE - TEXT_ICON_SPACING, false);
+
         g.drawString(cardDescription(), x + BORDER_SPACING, y + TEXT_SIZE - TEXT_ICON_SPACING);
         g.drawImage(image, x + CARD_WIDTH - BORDER_SPACING - image.getWidth(this.parent.getBoardView()), y + BORDER_SPACING, this.parent.getBoardView());
 
-        if (hasFaceCardImage()) {
-//            drawCenterImage(g, x, y);
-        } else {
-//            drawCenterImage(g, x, y);
-        }
+        drawCenterImage(g, x, y);
+
     }
 
     private void drawCenterImage(Graphics g, int x, int y) {
         int size = CARD_WIDTH * 3 / 4;
-        System.out.println(size);
-        Image centerImage = TextureLoader.getInstance().getTexture(textureName, size, size);
-        int xOffset = (CARD_HEIGHT - size) / 2;
-        int yOffset = (CARD_WIDTH - size) / 2;
+        Image centerImage = TextureLoader.getInstance().getTexture("center" + suitName, size, size);
+        int xOffset = (CARD_WIDTH - size) / 2;
+        int yOffset = (CARD_HEIGHT - size) / 2;
         g.drawImage(centerImage, x + xOffset, y + yOffset, this.parent.getBoardView());
     }
 

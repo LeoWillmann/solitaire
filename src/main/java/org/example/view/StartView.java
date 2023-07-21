@@ -20,7 +20,7 @@ public class StartView {
         frame.setLocationRelativeTo(null); // set no relative location
         frame.setVisible(true); // sets frame to visible
 
-        frame.add(InnitBoardView.solitaire());
+        frame.add(InnitBoardView.napoleon());
     }
 
 

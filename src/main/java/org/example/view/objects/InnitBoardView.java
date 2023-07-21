@@ -33,16 +33,17 @@ public class InnitBoardView {
     }
 
     public static BoardView napoleon() {
-        BoardView boardView = new BoardView(InnitGameBoards.makeGrandNapoleon(11));
-        innitNapoleon(boardView);
+        int columns = 20;
+        BoardView boardView = new BoardView(InnitGameBoards.makeGrandNapoleon(columns));
+        innitNapoleon(boardView, columns);
 
         return boardView;
     }
 
-    private static void innitNapoleon(BoardView boardView) {
+    private static void innitNapoleon(BoardView boardView, int columns) {
         Board board = boardView.getBoard();
         int j = 0;
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < columns; i++) {
             CardPositionView cardPositionView = new CardPositionView(board.getCardPositions().get(j), -1, true, boardView);
             cardPositionView.setPosition((int) (boardView.getPoint().getX() + j * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE)), (int) (boardView.getPoint().getY() + CardView.CARD_HEIGHT + BoardView.VERTICAL_COLUMN_DISTANCE));
             boardView.getCardPositionViews().add(cardPositionView);

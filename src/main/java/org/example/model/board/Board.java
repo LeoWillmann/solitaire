@@ -3,6 +3,8 @@ package org.example.model.board;
 import org.example.model.board.deck.CardDeck;
 import org.example.model.board.gameRules.FalseRule;
 import org.example.model.board.gameRules.cardTakeRules.SingleTakeRule;
+import org.example.model.board.gameRules.ruleContainers.AndCheckable;
+import org.example.model.board.gameRules.ruleContainers.AtomicCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,13 @@ public class Board {
     private CardDeck deck;
 
     public Board() {
-        cardPool = new CardPosition();
-        cardPool.addPlacementRule(new FalseRule());
-        cardPool.addTakeRule(new SingleTakeRule());
+        AndCheckable placementRule = new AndCheckable();
+        AndCheckable takeRule = new AndCheckable();
+        placementRule.addRule(new AtomicCheckable(new FalseRule()));
+        takeRule.addRule(new AtomicCheckable(new SingleTakeRule()));
+        
+        cardPool = new CardPosition(placementRule, takeRule);
+
     }
 
     public void addCardPosition(CardPosition cardPosition) {

@@ -103,6 +103,11 @@ public class TextureLoader {
         textures.put("suitSpades", getResourceFromPath(TEXTURE_DIR, SUITS_SUB_DIR, "spades.png"));
         textures.put("suitHearts", getResourceFromPath(TEXTURE_DIR, SUITS_SUB_DIR, "hearts.png"));
         textures.put("suitDiamonds", getResourceFromPath(TEXTURE_DIR, SUITS_SUB_DIR, "diamonds.png"));
+
+        textures.put("centerClubs", getResourceFromPath(TEXTURE_DIR, SUITS_SUB_DIR, "clubs.png"));
+        textures.put("centerSpades", getResourceFromPath(TEXTURE_DIR, SUITS_SUB_DIR, "spades.png"));
+        textures.put("centerHearts", getResourceFromPath(TEXTURE_DIR, SUITS_SUB_DIR, "hearts.png"));
+        textures.put("centerDiamonds", getResourceFromPath(TEXTURE_DIR, SUITS_SUB_DIR, "diamonds.png"));
     }
 
     private Image getEmptyTexture(int width, int height) {
