@@ -4,17 +4,23 @@ import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.gameRules.ruleContainers.RuleCheckable;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class FlipCardOrderConsequence extends RuleConsequence {
-    public FlipCardOrderConsequence(RuleCheckable ruleCheckable) {
+public class NestedConsequence extends RuleConsequence {
+    private final RuleConsequence ruleConsequence;
+
+    public NestedConsequence(RuleCheckable ruleCheckable, RuleConsequence ruleConsequence) {
         super(ruleCheckable);
+        this.ruleConsequence = ruleConsequence;
     }
 
     @Override
     public void enactConsequence(CardPosition cardPosition, Card nextCard, List<Card> newCards) {
-        Collections.reverse(newCards);
+        if (ruleConsequence != null) {
+            ruleConsequence.checkRule(cardPosition, nextCard, newCards);
+        }
+
     }
+
+
 }

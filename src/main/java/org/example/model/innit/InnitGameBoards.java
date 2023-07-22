@@ -6,6 +6,10 @@ import org.example.model.board.deck.CardDeck;
 import org.example.model.board.deck.deckBehavior.NapoleonBehavior;
 import org.example.model.board.deck.deckBehavior.NormalCardDeal;
 import org.example.model.board.deck.card.CardSuit;
+import org.example.model.board.gameRules.ruleConsequence.FlipCardOrderConsequence;
+import org.example.model.board.gameRules.ruleConsequence.NestedConsequence;
+import org.example.model.board.gameRules.ruleConsequence.RuleConsequence;
+import org.example.model.board.gameRules.ruleContainers.RuleCheckable;
 import org.example.model.board.gameRules.rules.miscRules.FalseRule;
 import org.example.model.board.gameRules.rules.miscRules.MoreThanXCardsRule;
 import org.example.model.board.gameRules.rules.miscRules.OrCardRule;
@@ -65,9 +69,10 @@ public class InnitGameBoards {
     }
 
     private static void innitNapoleonPositions(Board board, int columns) {
-        AndCheckable placementRule = new AndCheckable();
+        RuleConsequence placementConsequence;
         AndCheckable takeRule = new AndCheckable();
 
+        AndCheckable placementRule = new AndCheckable();
         placementRule.addRule(new SameSuitRule());
         {
             OrCheckable orCheckable = new OrCheckable();
@@ -77,10 +82,6 @@ public class InnitGameBoards {
             orRule.addRule(new CustomPlaceIdRule(board.getDeck().getMaxCardValue(), 1));
             orRule.addRule(new CustomPlaceIdRule(1, board.getDeck().getMaxCardValue()));
             orCheckable.addRule(orRule);
-//            orCheckable.addRule(new DescendingCardsRule()));
-//            orCheckable.addRule(new AscendingCardsRule()));
-//            orCheckable.addRule(new CustomPlaceIdRule(1, board.getDeck().getMaxCardValue())));
-//            orCheckable.addRule(new CustomPlaceIdRule(board.getDeck().getMaxCardValue(), 1)));
             placementRule.addRule(orCheckable);
         }
 
@@ -88,6 +89,9 @@ public class InnitGameBoards {
             AndCheckable andCheckable = new AndCheckable();
             andCheckable.addRule(new MoreThanXCardsRule(1));
             andCheckable.addRule(new IsCardPositionEmptyRule());
+            RuleConsequence flipCardOrderConsequence = new FlipCardOrderConsequence(andCheckable);
+
+            placementConsequence = new NestedConsequence(placementRule, flipCardOrderConsequence);
         }
 
 
@@ -105,7 +109,7 @@ public class InnitGameBoards {
         }
 
         for (int i = 0; i < columns; i++) {
-            CardPosition cardPosition = new CardPosition(placementRule, takeRule);
+            CardPosition cardPosition = new CardPosition(placementConsequence, takeRule);
             emptySpaceTakeRule.addPosition(cardPosition);
             board.addCardPosition(cardPosition);
         }
