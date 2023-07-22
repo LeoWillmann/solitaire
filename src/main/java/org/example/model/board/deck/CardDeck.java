@@ -3,7 +3,6 @@ package org.example.model.board.deck;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
 import org.example.model.board.deck.deckBehavior.DeckBehavior;
-import org.example.model.board.gameRules.ruleContainers.trash.RuleContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.Random;
 public class CardDeck {
     private static final int MAX_CARD_VALUE = 13;
     private final List<Card> cards;
-    private final RuleContainer deckRules = new RuleContainer();
     private DeckBehavior deckBehavior;
 
     public CardDeck(int numberOfDecks) {
@@ -27,10 +25,6 @@ public class CardDeck {
                 }
             }
         }
-    }
-
-    public RuleContainer getDeckRules() {
-        return deckRules;
     }
 
     public int getMaxCardValue() {

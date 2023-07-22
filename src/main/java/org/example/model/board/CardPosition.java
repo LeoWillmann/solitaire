@@ -2,7 +2,6 @@ package org.example.model.board;
 
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.gameRules.ruleContainers.RuleCheckable;
-import org.example.model.board.gameRules.ruleContainers.trash.RuleContainer;
 import org.example.view.objects.cardPositionView.CardMovementListener;
 
 import java.util.ArrayList;

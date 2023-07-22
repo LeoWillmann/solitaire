@@ -1,7 +1,8 @@
-package org.example.model.board.gameRules;
+package org.example.model.board.gameRules.rules.miscRules;
 
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
+import org.example.model.board.gameRules.rules.GameRule;
 
 public class FalseRule extends GameRule {
     @Override

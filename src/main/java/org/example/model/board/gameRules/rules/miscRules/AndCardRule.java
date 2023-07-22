@@ -1,12 +1,13 @@
-package org.example.model.board.gameRules;
+package org.example.model.board.gameRules.rules.miscRules;
 
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
+import org.example.model.board.gameRules.rules.GameRule;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AndRule extends GameRule {
+public class AndCardRule extends GameRule {
     private final List<GameRule> rules = new ArrayList<>();
 
     public void addRule(GameRule rule) {

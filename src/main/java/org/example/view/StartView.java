@@ -5,8 +5,13 @@ import org.example.view.objects.InnitBoardView;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Starts the view and creates a Swing JFrame.
+ */
 public class StartView {
-
+    /**
+     * Start UI function.
+     */
     public void startUI() {
         JFrame frame = new JFrame("Game Frame"); // makes frame with name "Game frame"
 
@@ -20,7 +25,7 @@ public class StartView {
         frame.setLocationRelativeTo(null); // set no relative location
         frame.setVisible(true); // sets frame to visible
 
-        frame.add(InnitBoardView.solitaire());
+        frame.add(InnitBoardView.napoleon());
     }
 
 

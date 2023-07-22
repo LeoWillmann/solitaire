@@ -1,10 +1,9 @@
 package org.example.model.board;
 
 import org.example.model.board.deck.CardDeck;
-import org.example.model.board.gameRules.FalseRule;
-import org.example.model.board.gameRules.cardTakeRules.SingleTakeRule;
+import org.example.model.board.gameRules.rules.miscRules.FalseRule;
+import org.example.model.board.gameRules.rules.cardTakeRules.SingleTakeRule;
 import org.example.model.board.gameRules.ruleContainers.AndCheckable;
-import org.example.model.board.gameRules.ruleContainers.AtomicCheckable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +19,9 @@ public class Board {
     public Board() {
         AndCheckable placementRule = new AndCheckable();
         AndCheckable takeRule = new AndCheckable();
-        placementRule.addRule(new AtomicCheckable(new FalseRule()));
-        takeRule.addRule(new AtomicCheckable(new SingleTakeRule()));
-        
+        placementRule.addRule(new FalseRule());
+        takeRule.addRule(new SingleTakeRule());
+
         cardPool = new CardPosition(placementRule, takeRule);
 
     }

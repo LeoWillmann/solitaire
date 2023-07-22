@@ -1,9 +1,8 @@
-package org.example.model.board.gameRules.cardTakeRules;
+package org.example.model.board.gameRules.rules.cardTakeRules;
 
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
-import org.example.model.board.gameRules.FalseRule;
-import org.example.model.board.gameRules.GameRule;
+import org.example.model.board.gameRules.rules.GameRule;
 
 import java.util.ArrayList;
 import java.util.List;

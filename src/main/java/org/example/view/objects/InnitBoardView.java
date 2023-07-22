@@ -33,7 +33,7 @@ public class InnitBoardView {
     }
 
     public static BoardView napoleon() {
-        int columns = 11;
+        int columns = 20;
         BoardView boardView = new BoardView(InnitGameBoards.makeGrandNapoleon(columns));
         innitNapoleon(boardView, columns);
 

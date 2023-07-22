@@ -1,9 +1,9 @@
-package org.example.model.board.gameRules.cardPlacementRules;
+package org.example.model.board.gameRules.rules.cardPlacementRules;
 
 import org.example.model.board.CardPosition;
 import org.example.model.board.deck.card.Card;
 import org.example.model.board.deck.card.CardSuit;
-import org.example.model.board.gameRules.GameRule;
+import org.example.model.board.gameRules.rules.GameRule;
 
 import java.util.ArrayList;
 import java.util.List;
