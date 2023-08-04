@@ -5,6 +5,7 @@ import org.example.model.board.Board;
 import org.example.model.board.CardPosition;
 import org.example.model.innit.InnitGameBoards;
 import org.example.view.objects.CardDeckView;
+import org.example.view.objects.Drawable;
 import org.example.view.objects.cardPositionView.CardPositionView;
 import org.example.view.objects.cardView.CardView;
 
@@ -18,30 +19,19 @@ public class BoardView extends JPanel implements Listenable {
 
     public static final int HORIZONTAL_COLUMN_DISTANCE = 30;
     public static final int VERTICAL_COLUMN_DISTANCE = 30;
-    private static final int POSX = 100;
-    private static final int POSY = 100;
-    private final Point point = new Point(POSX, POSY);
+    private final List<Drawable> drawables = new ArrayList<>();
     private final List<CardPositionView> cardPositionViews = new ArrayList<>();
     private final List<CardView> cardViews = new ArrayList<>();
     private final List<CardView> selectedCards = new ArrayList<>();
-    private final CardDeckView deckView;
-    private final CardPositionView cardPool;
+    private CardDeckView deckView;
     private Board board;
 
     public BoardView(Board board) {
         this.board = board;
-        deckView = new CardDeckView(board.getDeck());
-        deckView.setPosition(POSX, POSY);
-        cardPool = new CardPositionView(board.getCardPool(), board.getDeck().getDeckBehavior().getDeckProperty(), false, this);
-        cardPool.setPosition(POSX + (CardView.CARD_WIDTH + HORIZONTAL_COLUMN_DISTANCE), POSY);
 
         MouseMovementListener mouseMovementListener = new MouseMovementListener(this);
         addMouseListener(mouseMovementListener);
         addMouseMotionListener(mouseMovementListener);
-    }
-
-    public Point getPoint() {
-        return point;
     }
 
     public Board getBoard() {
@@ -50,10 +40,6 @@ public class BoardView extends JPanel implements Listenable {
 
     public void setBoard(Board board) {
         this.board = board;
-    }
-
-    public CardPositionView getCardPool() {
-        return cardPool;
     }
 
     public CardDeckView getDeckView() {
@@ -90,12 +76,27 @@ public class BoardView extends JPanel implements Listenable {
         return cardPositionViews;
     }
 
+    public void addDrawable(Drawable drawable) {
+        drawables.add(drawable);
+    }
+
+    public void setDeckView(CardDeckView deckView) {
+        drawables.remove(this.deckView);
+        this.deckView = deckView;
+        addDrawable(this.deckView);
+    }
+
+    public void addCardPositionView(CardPositionView cardPositionView) {
+        cardPositionViews.add(cardPositionView);
+        addDrawable(cardPositionView);
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        deckView.draw(g);
-        cardPool.draw(g);
-        drawPositions(g);
+        for (Drawable drawable : drawables) {
+            drawable.draw(g);
+        }
         drawSelectedCards(g);
     }
 

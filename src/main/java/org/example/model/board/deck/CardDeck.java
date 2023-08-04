@@ -17,11 +17,13 @@ public class CardDeck {
     private DeckBehavior deckBehavior;
 
     public CardDeck(int numberOfDecks) {
+        int id = 0;
         cards = new ArrayList<>();
         for (int i = 0; i < numberOfDecks; i++) {
             for (CardSuit suit : CardSuit.values()) {
                 for (int j = 0; j < MAX_CARD_VALUE; j++) {
-                    cards.add(new Card(j + 1, suit, true));
+                    cards.add(new Card(j + 1, suit, id,true));
+                    id++;
                 }
             }
         }

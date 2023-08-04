@@ -13,9 +13,6 @@ public class CardPosition {
     private RuleCheckable takeRule;
     private CardMovementListener cardMovementListener;
 
-    public CardPosition() {
-    }
-
     public CardPosition(RuleCheckable placementRule, RuleCheckable takeRule) {
         this.placementRule = placementRule;
         this.takeRule = takeRule;
@@ -101,7 +98,7 @@ public class CardPosition {
 
     public boolean requestPlacements(CardPosition takePosition, List<Card> cardList) {
         if (takePosition.isValidTake(cardList) && this.isValidPlacement(getTopCard(), cardList)) {
-            takePosition.takeTopCards(cardList.size());
+            takePosition.takeCards(cardList);
             this.placeCards(cardList);
             return true;
         }
@@ -123,7 +120,7 @@ public class CardPosition {
 
     private void notifyCardMovementListener() {
         if (cardMovementListener != null) {
-            cardMovementListener.updateView();
+            cardMovementListener.cardMoved();
         }
     }
 }

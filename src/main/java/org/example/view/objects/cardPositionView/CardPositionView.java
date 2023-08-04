@@ -126,20 +126,23 @@ public class CardPositionView implements Drawable, CardMovementListener {
 
     @Override
     public void draw(Graphics g) {
+        drawBottomOfPositionView(g);
+        for (CardView cardView : cardViews) {
+            cardView.draw(g);
+        }
+    }
+
+    private void drawBottomOfPositionView(Graphics g) {
         int x = (int) point.getX();
         int y = (int) point.getY();
         g.setColor(Color.GREEN);
         g.fillRect(x, y, CardView.CARD_WIDTH, CardView.CARD_HEIGHT);
         g.setColor(Color.WHITE);
         g.drawRect(x, y, CardView.CARD_WIDTH, CardView.CARD_HEIGHT);
-
-        for (CardView cardView : cardViews) {
-            cardView.draw(g);
-        }
     }
 
     @Override
-    public void updateView() {
+    public void cardMoved() {
         innitCardPosition();
         boardView.notifyListener();
     }

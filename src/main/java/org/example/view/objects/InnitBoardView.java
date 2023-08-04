@@ -9,6 +9,7 @@ import org.example.view.objects.cardView.CardView;
 public class InnitBoardView {
     public static BoardView solitaire() {
         BoardView boardView = new BoardView(InnitGameBoards.makeSolitaire());
+        boardView.setLocation(100, 100);
         innitSolitaire(boardView);
 
         return boardView;
@@ -16,25 +17,38 @@ public class InnitBoardView {
 
     public static void innitSolitaire(BoardView boardView) {
         Board board = boardView.getBoard();
+        CardPositionView cardPool = new CardPositionView(board.getCardPool(), board.getDeck().getDeckBehavior().getDeckProperty(), false, boardView);
+        cardPool.setPosition((int) (boardView.getLocation().getX()+ CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE), (int) boardView.getLocation().getY());
+        boardView.addDrawable(cardPool);
+
+        makeDeckView(boardView);
+
         int j = 0;
         for (int i = 0; i < 7; i++) {
             CardPositionView cardPositionView = new CardPositionView(board.getCardPositions().get(j), -1, true, boardView);
-            cardPositionView.setPosition((int) (boardView.getPoint().getX() + j * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE)), (int) (boardView.getPoint().getY() + CardView.CARD_HEIGHT + BoardView.VERTICAL_COLUMN_DISTANCE));
-            boardView.getCardPositionViews().add(cardPositionView);
+            cardPositionView.setPosition((int) (boardView.getLocation().getX() + j * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE)), (int) (boardView.getLocation().getY() + CardView.CARD_HEIGHT + BoardView.VERTICAL_COLUMN_DISTANCE));
+            boardView.addCardPositionView(cardPositionView);
             j++;
         }
 
         for (int i = 0; i < 4; i++) {
             CardPositionView cardPositionView = new CardPositionView(board.getCardPositions().get(j), 1, true, boardView);
-            cardPositionView.setPosition((int) (boardView.getPoint().getX() + i * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE) + 400), (int) boardView.getPoint().getY());
-            boardView.getCardPositionViews().add(cardPositionView);
+            cardPositionView.setPosition((int) (boardView.getLocation().getX() + i * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE) + 400), (int) boardView.getLocation().getY());
+            boardView.addCardPositionView(cardPositionView);
             j++;
         }
     }
 
+    private static void makeDeckView(BoardView boardView) {
+        CardDeckView deckView = new CardDeckView(boardView.getBoard().getDeck());
+        deckView.setPosition((int) boardView.getLocation().getX(), (int) boardView.getLocation().getY());
+        boardView.setDeckView(deckView);
+    }
+
     public static BoardView napoleon() {
-        int columns = 20;
+        int columns = 11;
         BoardView boardView = new BoardView(InnitGameBoards.makeGrandNapoleon(columns));
+        boardView.setLocation(100, 100);
         innitNapoleon(boardView, columns);
 
         return boardView;
@@ -42,18 +56,21 @@ public class InnitBoardView {
 
     private static void innitNapoleon(BoardView boardView, int columns) {
         Board board = boardView.getBoard();
+
+        makeDeckView(boardView);
+
         int j = 0;
         for (int i = 0; i < columns; i++) {
             CardPositionView cardPositionView = new CardPositionView(board.getCardPositions().get(j), -1, true, boardView);
-            cardPositionView.setPosition((int) (boardView.getPoint().getX() + j * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE)), (int) (boardView.getPoint().getY() + CardView.CARD_HEIGHT + BoardView.VERTICAL_COLUMN_DISTANCE));
-            boardView.getCardPositionViews().add(cardPositionView);
+            cardPositionView.setPosition((int) (boardView.getLocation().getX() + j * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE)), (int) (boardView.getLocation().getY() + CardView.CARD_HEIGHT + BoardView.VERTICAL_COLUMN_DISTANCE));
+            boardView.addCardPositionView(cardPositionView);
             j++;
         }
 
         for (int i = 0; i < 8; i++) {
             CardPositionView cardPositionView = new CardPositionView(board.getCardPositions().get(j), 1, true, boardView);
-            cardPositionView.setPosition((int) (boardView.getPoint().getX() + i * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE) + 400), (int) boardView.getPoint().getY());
-            boardView.getCardPositionViews().add(cardPositionView);
+            cardPositionView.setPosition((int) (boardView.getLocation().getX() + i * (CardView.CARD_WIDTH + BoardView.HORIZONTAL_COLUMN_DISTANCE) + 400), (int) boardView.getLocation().getY());
+            boardView.addCardPositionView(cardPositionView);
             j++;
         }
     }

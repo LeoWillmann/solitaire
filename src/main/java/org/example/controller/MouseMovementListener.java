@@ -13,6 +13,9 @@ import java.util.List;
 
 import static org.example.view.objects.cardPositionView.CardPositionView.CARD_VERTICAL_DISTANCE;
 
+/**
+ * Listens to mouse movement and reflects this on the boardView.
+ */
 public class MouseMovementListener extends MouseAdapter {
 
     private static final int CARDVIEW_DISTANCE_MAX = 60;
@@ -21,11 +24,19 @@ public class MouseMovementListener extends MouseAdapter {
     private int xOffset;
     private int yOffset;
 
-
+    /**
+     * Constructor.
+     * @param boardView
+     */
     public MouseMovementListener(BoardView boardView) {
         this.boardView = boardView;
     }
 
+    /**
+     * Takes the Card from the cardView and returns the list from that.
+     * @param cardViews Cardviews to take cards from.
+     * @return cards from cardView.
+     */
     private static List<Card> reduceCardViewToCards(List<CardView> cardViews) {
         List<Card> cards = new ArrayList<>();
         for (CardView cardView : cardViews) {
@@ -34,6 +45,11 @@ public class MouseMovementListener extends MouseAdapter {
         return cards;
     }
 
+    /**
+     * When mouse pressed. Check if mouse event is on a cardView, if so, check if you can take the cards.
+     * If not check if clicked on deck.
+     * @param e the event to be processed
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         super.mousePressed(e);
@@ -42,21 +58,26 @@ public class MouseMovementListener extends MouseAdapter {
         if (cardView != null) {
             cardViewList = cardView.getParent().getCardsAfterCard(cardView);
             List<Card> cards = reduceCardViewToCards(cardViewList);
-            if (!cardView.getParent().getCardPosition().isValidTake(cards)) {
-                cardViewList = null;
-            } else {
+            if (cardView.getParent().getCardPosition().isValidTake(cards)) {
                 boardView.setCardViewsToTop(cardViewList);
                 boardView.setSelectedCards(cardViewList);
                 xOffset = (int) (e.getX() - cardView.getPoint().getX());
                 yOffset = (int) (e.getY() - cardView.getPoint().getY());
+            } else {
+                cardViewList = null;
             }
-        }
-
-        if (isOnDeck(e)) {
-            boardView.getDeckView().getDeck().performAction();
+        } else {
+            if (isOnDeck(e)) {
+                boardView.getDeckView().getDeck().performAction();
+            }
         }
     }
 
+    /**
+     * Checks if the mouseEvent e is within the deck area.
+     * @param e mouseEvent.
+     * @return if mouseEvent e is within the deck area return true, otherwise false.
+     */
     private boolean isOnDeck(MouseEvent e) {
         int x1 = (int) boardView.getDeckView().getPoint().getX();
         int y1 = (int) boardView.getDeckView().getPoint().getY();
@@ -69,10 +90,9 @@ public class MouseMovementListener extends MouseAdapter {
     }
 
     /**
-     * {@inheritDoc}
+     * when dragging mouse, check if there is a selected cardViewList, update its location.
      *
-     * @param e
-     * @since 1.6
+     * @param e mouse event.
      */
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -84,6 +104,10 @@ public class MouseMovementListener extends MouseAdapter {
         }
     }
 
+    /**
+     * sets positions of the cardViews according to vertical positioning.
+     * @param e mouse position.
+     */
     private void setPositionsOfCardList(MouseEvent e) {
         int y = e.getY() - yOffset;
         for (CardView cardView : cardViewList) {
@@ -92,6 +116,12 @@ public class MouseMovementListener extends MouseAdapter {
         }
     }
 
+    /**
+     * Checks for all cardViews if the mouseEvent is within the cardView.
+     * returns the latest CardView in the list, if at all.
+     * @param e MouseEvent.
+     * @return CardView.
+     */
     private CardView getCardView(MouseEvent e) {
         CardView cardClicked = null;
         for (CardView cardView : boardView.getCardViews()) {
@@ -107,9 +137,8 @@ public class MouseMovementListener extends MouseAdapter {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param e
+     * On mouse release, resolve card movement and move the selected cards to the supposed position.
+     * @param e MouseEvent.
      */
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -120,18 +149,29 @@ public class MouseMovementListener extends MouseAdapter {
         cardViewList = null;
     }
 
+    /**
+     * Resolves card movement by moving cards back to original position if mouse released
+     * more than CARDVIEW_DISTANCE_MAX pixels away or is an invalid placement.
+     * Otherwise, move cards.
+     */
     private void resolveCardMovement() {
         if (cardViewList == null) {
             return;
         }
 
         CardPositionView cardPositionView = getClosestCardPositionView(cardViewList.get(0));
-        if (cardPositionView == null || !moveCardAction(cardPositionView, cardViewList)) {
+        if (cardPositionView == null || !moveCardAttempt(cardPositionView, cardViewList)) {
             resetCardViewListPositions();
         }
     }
 
-    private boolean moveCardAction(CardPositionView cardPositionView, List<CardView> cardViews) {
+    /**
+     * Attempts to move cards from CardPosition to CardPosition, returns true if successful, false otherwise.
+     * @param cardPositionView move cards to this cardPositionView.
+     * @param cardViews CardViews to move.
+     * @return success status.
+     */
+    private boolean moveCardAttempt(CardPositionView cardPositionView, List<CardView> cardViews) {
         CardPosition placePosition = cardPositionView.getCardPosition();
         CardPosition takePosition = cardViews.get(0).getParent().getCardPosition();
         List<Card> cards = reduceCardViewToCards(cardViews);
@@ -139,6 +179,11 @@ public class MouseMovementListener extends MouseAdapter {
         return placePosition.requestPlacements(takePosition, cards);
     }
 
+    /**
+     * Gets the closest card position view from the CardView. That is within CARDVIEW_DISTANCE_MAX and not its parent.
+     * @param cardView CardView to compare to.
+     * @return closest card position view from the CardView, null if not within CARDVIEW_DISTANCE_MAX.
+     */
     private CardPositionView getClosestCardPositionView(CardView cardView) {
         int distance = Integer.MAX_VALUE;
         CardPositionView cpv = null;
@@ -156,6 +201,9 @@ public class MouseMovementListener extends MouseAdapter {
         }
     }
 
+    /**
+     * resets the card view locations.
+     */
     private void resetCardViewListPositions() {
         if (cardViewList == null) {
             return;
@@ -165,21 +213,5 @@ public class MouseMovementListener extends MouseAdapter {
         }
         boardView.notifyListener();
     }
-
-    private CardPositionView getCardPositionView(MouseEvent e) {
-        for (CardPositionView cardPositionView : boardView.getCardPositionViews()) {
-            if (cardPositionView.getCardViews().size() > 0) {
-                int x1 = (int) cardPositionView.getPoint().getX();
-                int y1 = (int) cardPositionView.getPoint().getY();
-                int x2 = x1 + CardView.CARD_WIDTH;
-                int y2 = y1 + (cardPositionView.getCardViews().size() - 1) * CARD_VERTICAL_DISTANCE + CardView.CARD_HEIGHT;
-                if (e.getX() >= x1 && e.getX() <= x2 && e.getY() >= y1 && e.getY() <= y2) {
-                    return cardPositionView;
-                }
-            }
-        }
-        return null;
-    }
-
 
 }

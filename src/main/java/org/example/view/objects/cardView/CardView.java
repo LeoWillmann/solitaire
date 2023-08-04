@@ -77,6 +77,9 @@ public class CardView implements Drawable {
 
         drawCenterImage(g, x, y);
 
+//        g.setColor(new Color(0,0,0,155));
+//        g.fillRect(x,y,CARD_WIDTH, CARD_HEIGHT);
+
     }
 
     private void drawCenterImage(Graphics g, int x, int y) {

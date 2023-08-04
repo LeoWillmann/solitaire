@@ -25,7 +25,8 @@ public class StartView {
         frame.setLocationRelativeTo(null); // set no relative location
         frame.setVisible(true); // sets frame to visible
 
-        frame.add(InnitBoardView.napoleon());
+        JPanel boardView = InnitBoardView.napoleon();
+        frame.add(boardView);
     }
 
 
